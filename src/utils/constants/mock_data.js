@@ -239,4 +239,3 @@ const goals = [achieveC1InGerman] // all the goals
 // console.log(`Days: ${days}, Hours: ${hours}, Minutes: ${minutes}`);
 
 //   "2024-10-30T15:45" // date + hour
-//   "2024-10-30T15:45" // date + hour
