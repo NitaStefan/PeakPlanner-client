@@ -2,13 +2,21 @@ import { Route, Routes } from "react-router-dom"
 import AuthPage from "./pages/AuthPage"
 import LandingPage from "./pages/LandingPage"
 import MainPage from "./pages/MainPage"
+import Header from "./components/Header"
+import Footer from "./components/Footer"
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/main" element={<MainPage />} />
-      <Route path="/auth" element={<AuthPage />} />
-    </Routes>
+    <div className="max-container padding-x">
+      <Header />
+      <main>
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/landing" element={<LandingPage />} />
+          <Route path="/auth" element={<AuthPage />} />
+        </Routes>
+      </main>
+      <Footer />
+    </div>
   )
 }

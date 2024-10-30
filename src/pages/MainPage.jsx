@@ -1,11 +1,5 @@
-import React from "react"
-
 const MainPage = () => {
-  return (
-    <div>
-      <h1 className="text-medium">Main Page</h1>
-    </div>
-  )
+  return <h1 className="text-white text-2xl">Main Page</h1>
 }
 
 export default MainPage
