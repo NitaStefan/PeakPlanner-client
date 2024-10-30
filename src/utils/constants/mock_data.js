@@ -224,7 +224,7 @@ const achieveC1InGerman = [
     ],
   },
 ]
-const goals = [achieveC1InGerman]
+const goals = [achieveC1InGerman] // all the goals
 
 // const durationString = "5d 3h 20m"; // Example duration
 
