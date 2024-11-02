@@ -9,13 +9,11 @@ export default function App() {
   return (
     <div className="max-container padding-x">
       <Header />
-      <main>
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/landing" element={<LandingPage />} />
-          <Route path="/auth" element={<AuthPage />} />
-        </Routes>
-      </main>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/landing" element={<LandingPage />} />
+        <Route path="/auth" element={<AuthPage />} />
+      </Routes>
       <Footer />
     </div>
   )

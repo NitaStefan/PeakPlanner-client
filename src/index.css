@@ -20,4 +20,10 @@
   .padding-x {
     @apply sm:px-16 px-8;
   }
+
+  .padding-y {
+    @apply sm:py-24 py-12;
+  }
 }
+
+/* https://github.com/adrianhajdin/nike_landing_page/blob/main/src/index.css */

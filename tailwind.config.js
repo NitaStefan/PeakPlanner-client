@@ -8,6 +8,7 @@ export default {
         medium: "#424769",
         light: "#7077A1",
         tan: "#F6B17A",
+        lightText: "#F5F5F5",
       },
     },
   },
