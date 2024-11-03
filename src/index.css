@@ -24,6 +24,10 @@
   .padding-y {
     @apply sm:py-24 py-12;
   }
+
+  .padding-content {
+    @apply pl-4 py-2 pr-6;
+  }
 }
 
 /* https://github.com/adrianhajdin/nike_landing_page/blob/main/src/index.css */
