@@ -2,6 +2,19 @@ import { useState } from "react"
 import Priority from "../icons/Priority"
 import DropDown from "../icons/DropDown"
 
+const Description = ({ name, priority, steps }) => {
+  const [isOpen, setIsOpen] = useState(false)
+
+  return (
+    <div className="inline-block grow mt-4 ml-4">
+      <p className="text-tan text-xl mb-4">
+        {name} <Priority priority={priority} />
+      </p>
+      <Steps isOpen={isOpen} toggle={setIsOpen} steps={steps} />
+    </div>
+  )
+}
+
 const Steps = ({ isOpen, steps, toggle }) => {
   return isOpen ? (
     <ul className="relative border-2 rounded bg-medium pl-4">
@@ -21,19 +34,6 @@ const Steps = ({ isOpen, steps, toggle }) => {
       <button className="border-2 rounded-md" onClick={() => toggle(!isOpen)}>
         <DropDown />
       </button>
-    </div>
-  )
-}
-
-const Description = ({ name, priority, steps }) => {
-  const [isOpen, setIsOpen] = useState(false)
-
-  return (
-    <div className="inline-block grow mt-4 ml-4">
-      <p className="text-tan text-xl mb-4">
-        {name} <Priority priority={priority} />
-      </p>
-      <Steps isOpen={isOpen} toggle={setIsOpen} steps={steps} />
     </div>
   )
 }
