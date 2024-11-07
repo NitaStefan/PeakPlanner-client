@@ -24,11 +24,15 @@ const Steps = ({ isOpen, steps, toggle }) => {
           <p>{step.duration}</p>
         </li>
       ))}
-      <button className="absolute top-1 right-1 rotate-180 border-2 rounded-md" onClick={() => toggle(!isOpen)}>
+      <button
+        className="absolute top-1 right-1 rotate-180 border-2 rounded-md"
+        onClick={() => toggle(!isOpen)}
+      >
         <DropDown />
       </button>
     </ul>
   ) : (
+    //add StepForm that updates the steps of an activity
     <div>
       Steps to follow: {steps.length}{" "}
       <button className="border-2 rounded-md" onClick={() => toggle(!isOpen)}>
@@ -37,5 +41,29 @@ const Steps = ({ isOpen, steps, toggle }) => {
     </div>
   )
 }
+
+// const updateStepCompletionInPlan = (planId, activityId, stepId, completed) => {
+//   setPlans(prevPlans =>
+//     prevPlans.map(plan =>
+//       plan.id === planId
+//         ? {
+//             ...plan,
+//             activities: plan.activities.map(activity =>
+//               activity.id === activityId
+//                 ? {
+//                     ...activity,
+//                     steps: activity.steps.map(step =>
+//                       step.id === stepId
+//                         ? { ...step, completed } // Update the specific step's completed value
+//                         : step // Return the unmodified step
+//                     )
+//                   }
+//                 : activity // Return the unmodified activity
+//             )
+//           }
+//         : plan // Return the unmodified plan
+//     )
+//   );
+// };
 
 export default Description

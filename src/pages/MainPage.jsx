@@ -7,7 +7,7 @@ const MainPage = () => {
   // const goalPlans = plans.filter(plan => plan.type === "goal")
   // const dailyPlans = plans.filter(plan => plan.type === "daily")
 
-  const [showDailyPlans, setShowDailyPlans] = useState(false)
+  const [showDailyPlans, setShowDailyPlans] = useState(true)
 
   const [dailyPlans, setDailyPlans] = useState(null)
   const [goalPlans, setGoalPlans] = useState(null)
@@ -25,11 +25,16 @@ const MainPage = () => {
   }, [])
 
   const displayedPlans = showDailyPlans ? dailyPlans : goalPlans
+  const setDisplayedPlans = showDailyPlans ? setDailyPlans : setGoalPlans
 
   return (
     <main className="padding-y min-h-[600px]">
       <SideOverview dailyPlans={dailyPlans} goalPlans={goalPlans} />
-      <Dashboard displayedPlans={displayedPlans} setDailyPlans={setDailyPlans} isDaily={showDailyPlans} />
+      <Dashboard
+        displayedPlans={displayedPlans}
+        setDisplayedPlans={setDisplayedPlans}
+        isDaily={showDailyPlans}
+      />
     </main>
   )
 }
