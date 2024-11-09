@@ -16,5 +16,3 @@ export default async plans => {
     console.error("Error saving plans:", error)
   }
 }
-
-//POST request to add a plan and get the updated plan back from the db

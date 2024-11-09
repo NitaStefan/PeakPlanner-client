@@ -1,15 +1,15 @@
 import weekdayWeekendPlans from "../../utils/createWorkWeekDayPlans"
 import daysOfWeekPlans from "../../utils/createDaysOfWeekPlans"
-import saveDailyPlans from "../../utils/saveDailyPlans"
+import persistDailyPlans from "../../utils/persistDailyPlans"
 
 const InitializeDailyPlans = ({ setDailyPlans }) => {
   const byWeekdayWeekend = async () => {
-    const thePlans = await saveDailyPlans(weekdayWeekendPlans)
+    const thePlans = await persistDailyPlans(weekdayWeekendPlans)
     setDailyPlans(thePlans)
   }
 
   const byDaysOfWeek = async () => {
-    const thePlans = await saveDailyPlans(daysOfWeekPlans)
+    const thePlans = await persistDailyPlans(daysOfWeekPlans)
     setDailyPlans(thePlans)
   }
 

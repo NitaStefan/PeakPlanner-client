@@ -2,10 +2,22 @@ import Interval from "./Interval"
 import Description from "./Description"
 import InitializeDailyPlans from "./InitializeDailyPlans"
 import ActivityForm from "./ActivityForm"
+import ActionControls from "./ActionControls"
 import { useState } from "react"
 
 const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
-  const [isAddingActivity, setIsAddingActivity] = useState(true)
+  const [addActivityPlanId, setAddActivityPlanId] = useState(0)
+  const [editActivityActId, setEditActivityActId] = useState(0)
+
+  const handleOpenEditForm = activityId => {
+    setEditActivityActId(activityId)
+    setAddActivityPlanId(0)
+  }
+
+  const handleOpenAddForm = planId => {
+    setAddActivityPlanId(planId)
+    setEditActivityActId(0)
+  }
 
   return isDaily && displayedPlans !== null && displayedPlans.length === 0 ? (
     <InitializeDailyPlans setDailyPlans={setDisplayedPlans} />
@@ -16,18 +28,38 @@ const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
           <div key={plan.id}>
             <div className="bg-medium my-2">{plan.title} </div>
             {plan.activities &&
-              plan.activities.map(activity => (
-                <div key={activity.id} className="flex pl-4">
-                  <Interval startTime={activity.startTime} endTime={activity.endTime} />
-                  <Description
-                    name={activity.name}
-                    priority={activity.priority}
-                    steps={activity.steps}
+              plan.activities.map(activity =>
+                editActivityActId !== activity.id ? (
+                  <div key={activity.id} className="flex pl-4 group">
+                    <Interval startTime={activity.startTime} endTime={activity.endTime} />
+                    <Description
+                      name={activity.name}
+                      priority={activity.priority}
+                      steps={activity.steps}
+                    />
+                    <ActionControls openEditForm={() => handleOpenEditForm(activity.id)} />
+                  </div>
+                ) : (
+                  <ActivityForm
+                    key={activity.id}
+                    planId={plan.id}
+                    theActivity={activity}
+                    setPlans={setDisplayedPlans}
+                    closeForm={() => setEditActivityActId(0)}
                   />
-                </div>
-              ))}
-            <button className="border-2 px-2">+</button>
-            {isAddingActivity && <ActivityForm planId={plan.id} setPlans={setDisplayedPlans} />}
+                )
+              )}
+            {addActivityPlanId !== plan.id ? (
+              <button onClick={() => handleOpenAddForm(plan.id)} className="border-2 px-2">
+                +
+              </button>
+            ) : (
+              <ActivityForm
+                planId={plan.id}
+                setPlans={setDisplayedPlans}
+                closeForm={() => setAddActivityPlanId(0)}
+              />
+            )}
           </div>
         ))}
     </section>

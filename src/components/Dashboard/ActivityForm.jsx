@@ -1,51 +1,78 @@
 import { useState } from "react"
+import persistActivity from "../../utils/persistActivity"
+import updateActivity from "../../utils/updateActivity"
+import Close from "../icons/Close"
 
-const ActivityForm = ({ planId, setPlans }) => {
+const ActivityForm = ({ planId, setPlans, closeForm, theActivity }) => {
   // interval input
-  const [theStartTime, setTheStartTime] = useState("09:10")
-  const [theEndTime, setTheEndTime] = useState("11:45")
-  const [isValidStartTime, setIsValidStartTime] = useState(true)
-  const [isValidEndTime, setIsValidEndTime] = useState(true)
-  const isCorrectInterval = isValidStartTime && isValidEndTime
+  const [theStartTime, setTheStartTime] = useState(theActivity?.startTime || "17:14")
+  const [theEndTime, setTheEndTime] = useState(theActivity?.endTime || "19:14")
   const minTime = "09:00"
-  const maxTime = "17:00"
+  const maxTime = "18:00"
 
   // name input
-  const [theName, setTheName] = useState("")
+  const [theName, setTheName] = useState(theActivity?.name || "")
 
   // priority input
-  const [thePriority, setThePriority] = useState("OPTIONAL")
+  const [thePriority, setThePriority] = useState(theActivity?.priority || "OPTIONAL")
 
-  // POST req with the new activity, get it back with the updated id, update the plans
+  const formMode = theActivity ? "UPDATE" : "ADD"
 
-  console.log({
-    id: null,
+  const newActivity = {
     startTime: theStartTime,
-    theEndTime: theEndTime,
+    endTime: theEndTime,
     name: theName,
     priority: thePriority,
-  })
+  }
+
+  const isCorrectInterval =
+    theStartTime >= minTime && theStartTime < theEndTime && theEndTime <= maxTime
+
+  const addTheActivity = async () => {
+    const dbActivity = await persistActivity(newActivity, planId)
+
+    setPlans(prevPlans =>
+      prevPlans.map(plan =>
+        plan.id === planId
+          ? { ...plan, activities: [...(plan.activities || []), dbActivity] }
+          : plan
+      )
+    )
+  }
+
+  const updateTheActivity = () => {
+    setPlans(prevPlans =>
+      prevPlans.map(plan =>
+        plan.id === planId
+          ? {
+              ...plan,
+              activities: plan.activities.map(activity =>
+                activity.id === theActivity.id
+                  ? {
+                      ...activity,
+                      startTime: theStartTime,
+                      endTime: theEndTime,
+                      name: theName,
+                      priority: thePriority,
+                    }
+                  : activity
+              ),
+            }
+          : plan
+      )
+    )
+    // let the activity update in the meantime
+    updateActivity(newActivity, theActivity.id)
+  }
+
+  const handleAction = formMode === "ADD" ? addTheActivity : updateTheActivity
 
   return (
     <div className="test-container">
-      <div className="inline-block">
-        <IntervalInput
-          theTime={theStartTime}
-          setTheTime={setTheStartTime}
-          minTime={minTime}
-          maxTime={theEndTime}
-          isValid={isValidStartTime}
-          setIsValid={setIsValidStartTime}
-        />
+      <div className={`inline-block ${!isCorrectInterval && "outline outline-red-600 outline-4"}`}>
+        <IntervalInput theTime={theStartTime} setTheTime={setTheStartTime} />
         <div>to</div>
-        <IntervalInput
-          theTime={theEndTime}
-          setTheTime={setTheEndTime}
-          minTime={theStartTime}
-          maxTime={maxTime}
-          isValid={isValidEndTime}
-          setIsValid={setIsValidEndTime}
-        />
+        <IntervalInput theTime={theEndTime} setTheTime={setTheEndTime} />
       </div>
       <div className="inline-block ml-6">
         <NameInput theName={theName} setTheName={setTheName} />
@@ -54,30 +81,27 @@ const ActivityForm = ({ planId, setPlans }) => {
         <PriorityInput thePriority={thePriority} setThePriority={setThePriority} />
       </div>
       <button
-        className={`test-container ml-8 ${!isCorrectInterval && "bg-gray-600"}`}
-        disabled={!isCorrectInterval}
+        onClick={() => {
+          handleAction()
+          closeForm()
+        }}
+        className={`test-container ml-8 ${(!isCorrectInterval || theName == "") && "bg-gray-600"}`}
+        disabled={!isCorrectInterval || theName === ""}
       >
-        ADD
+        {formMode}
+      </button>
+      <button onClick={() => closeForm()} className="float-right">
+        <Close />
       </button>
     </div>
   )
 }
 
-const IntervalInput = ({ theTime, setTheTime, isValid, setIsValid, minTime, maxTime }) => {
-  const handleInput = e => {
-    const value = e.target.value
-    setTheTime(value)
-    if (value < minTime || value > maxTime) setIsValid(false)
-    else setIsValid(true)
-  }
+const IntervalInput = ({ theTime, setTheTime }) => {
+  const handleInput = e => setTheTime(e.target.value)
 
   return (
-    <input
-      className={`text-black rounded ${!isValid && "bg-red-400"}`}
-      type="time"
-      value={theTime}
-      onChange={handleInput}
-    />
+    <input className={"text-black rounded"} type="time" value={theTime} onChange={handleInput} />
   )
 }
 

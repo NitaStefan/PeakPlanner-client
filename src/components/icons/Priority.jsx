@@ -1,16 +1,16 @@
 const Priority = ({ priority }) => {
   let theFill = "#F5F5F5"
   switch (priority) {
-    case "optional":
+    case "OPTIONAL":
       theFill = "#F5F5F5"
       break
-    case "light":
+    case "LIGHT":
       theFill = "#6a994e"
       break
-    case "medium":
+    case "MEDIUM":
       theFill = "#edb707"
       break
-    case "high":
+    case "HIGH":
       theFill = "#ef233c"
       break
   }
