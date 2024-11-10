@@ -1,9 +1,7 @@
-import Interval from "./Interval"
-import Description from "./Description"
 import InitializeDailyPlans from "./InitializeDailyPlans"
 import ActivityForm from "./ActivityForm"
-import ActionControls from "./ActionControls"
 import { useState } from "react"
+import Activity from "./Activity"
 
 const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
   const [addActivityPlanId, setAddActivityPlanId] = useState(0)
@@ -30,15 +28,13 @@ const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
             {plan.activities &&
               plan.activities.map(activity =>
                 editActivityActId !== activity.id ? (
-                  <div key={activity.id} className="flex pl-4 group">
-                    <Interval startTime={activity.startTime} endTime={activity.endTime} />
-                    <Description
-                      name={activity.name}
-                      priority={activity.priority}
-                      steps={activity.steps}
-                    />
-                    <ActionControls openEditForm={() => handleOpenEditForm(activity.id)} />
-                  </div>
+                  <Activity
+                    key={activity.id}
+                    planId={plan.id}
+                    activity={activity}
+                    setPlans={setDisplayedPlans}
+                    openEditForm={() => handleOpenEditForm(activity.id)}
+                  />
                 ) : (
                   <ActivityForm
                     key={activity.id}

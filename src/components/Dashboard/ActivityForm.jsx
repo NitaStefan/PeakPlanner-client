@@ -5,8 +5,8 @@ import Close from "../icons/Close"
 
 const ActivityForm = ({ planId, setPlans, closeForm, theActivity }) => {
   // interval input
-  const [theStartTime, setTheStartTime] = useState(theActivity?.startTime || "17:14")
-  const [theEndTime, setTheEndTime] = useState(theActivity?.endTime || "19:14")
+  const [theStartTime, setTheStartTime] = useState(theActivity?.startTime || "12:14")
+  const [theEndTime, setTheEndTime] = useState(theActivity?.endTime || "14:24")
   const minTime = "09:00"
   const maxTime = "18:00"
 

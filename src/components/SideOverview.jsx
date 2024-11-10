@@ -1,4 +1,19 @@
-const SideOverview = ({ dailyPlans, goalPlans }) => {
+import { useState } from "react"
+import persistPlan from "../utils/persistPlan"
+
+const SideOverview = ({ dailyPlans, goalPlans, setGoalPlans }) => {
+  const [isAddingPlan, setIsAddingPlan] = useState(false)
+  const [theTitle, setTheTitle] = useState("")
+
+  const handleAddPlan = async () => {
+    const thePlan = { title: theTitle, type: "GOAL" }
+    const dbPlan = await persistPlan(thePlan)
+    setGoalPlans(prevPlans => [...prevPlans, dbPlan])
+    setIsAddingPlan(false)
+  }
+
+  //TODO : add click outside event for the title input
+
   return (
     <aside className="fixed w-80 border-2 rounded-lg padding-content">
       <div className="text-lightText">Daily Routine</div>
@@ -12,7 +27,15 @@ const SideOverview = ({ dailyPlans, goalPlans }) => {
             </li>
           ))}
       </ul>
-      <div className="text-lightText">Goals</div>
+      <div className="text-lightText group">
+        Goals{" "}
+        <button
+          onClick={() => setIsAddingPlan(true)}
+          className="float-right hidden group-hover:block"
+        >
+          +
+        </button>
+      </div>
       <ul className="py-1">
         {goalPlans &&
           goalPlans.map(plan => (
@@ -23,6 +46,23 @@ const SideOverview = ({ dailyPlans, goalPlans }) => {
             </li>
           ))}
       </ul>
+      {isAddingPlan && (
+        <>
+          <input
+            className="pl-3"
+            type="text"
+            onChange={e => setTheTitle(e.target.value)}
+            value={theTitle}
+          />
+          <button
+            disabled={theTitle === ""}
+            onClick={() => handleAddPlan()}
+            className={`text-lightText px-2 ${theTitle === "" && "bg-gray-600"}`}
+          >
+            Add
+          </button>
+        </>
+      )}
     </aside>
   )
 }

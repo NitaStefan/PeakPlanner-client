@@ -9,9 +9,6 @@ export default async (activity, activityId) => {
     })
 
     if (!response.ok) throw new Error("Failed to update activity")
-
-    // const data = await response.json()
-    // return data
   } catch (error) {
     console.error("Error saving plans:", error)
   }

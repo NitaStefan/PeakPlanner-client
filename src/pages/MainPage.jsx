@@ -1,13 +1,9 @@
-import plans from "../utils/constants/mock_data"
 import SideOverview from "../components/SideOverview"
 import Dashboard from "../components/Dashboard/Dashboard"
 import { useEffect, useState } from "react"
 
 const MainPage = () => {
-  // const goalPlans = plans.filter(plan => plan.type === "goal")
-  // const dailyPlans = plans.filter(plan => plan.type === "daily")
-
-  const [showDailyPlans, setShowDailyPlans] = useState(true)
+  const [showDailyPlans, setShowDailyPlans] = useState(false)
 
   const [dailyPlans, setDailyPlans] = useState(null)
   const [goalPlans, setGoalPlans] = useState(null)
@@ -29,7 +25,7 @@ const MainPage = () => {
 
   return (
     <main className="padding-y min-h-[600px]">
-      <SideOverview dailyPlans={dailyPlans} goalPlans={goalPlans} />
+      <SideOverview dailyPlans={dailyPlans} goalPlans={goalPlans} setGoalPlans={setGoalPlans} />
       <Dashboard
         displayedPlans={displayedPlans}
         setDisplayedPlans={setDisplayedPlans}
