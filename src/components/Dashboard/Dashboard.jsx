@@ -29,6 +29,7 @@ const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
               </button>
             ) : (
               <ActivityForm
+                isDaily={isDaily}
                 planId={plan.id}
                 setPlans={setDisplayedPlans}
                 closeForm={() => setAddActivityPlanId(0)}

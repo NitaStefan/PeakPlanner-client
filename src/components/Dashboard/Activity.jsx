@@ -6,6 +6,7 @@ import Delete from "../icons/Delete"
 import deleteDbActivity from "../../utils/restApiRequests/deleteActivity"
 import ActivityForm from "./ActivityForm"
 import { useState } from "react"
+import showTime from "../../utils/showTime"
 
 const Activity = ({ activity, planId, setPlans }) => {
   const [editActivityActId, setEditActivityActId] = useState(0)
@@ -72,9 +73,9 @@ const ActivityInformation = ({ activity, planId, setPlans, openEditForm }) => {
 const Interval = ({ startTime, endTime }) => {
   return (
     <div className="inline-flex items-center flex-col mt-4">
-      <p>{startTime}</p>
+      <p>{showTime(startTime)}</p>
       <CurvedArrow />
-      <p>{endTime}</p>
+      <p>{showTime(endTime)}</p>
     </div>
   )
 }

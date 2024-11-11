@@ -4,14 +4,15 @@ import updateActivity from "../../utils/restApiRequests/updateActivity"
 import Close from "../icons/Close"
 import useClickOutside from "../hooks/useClickOutside"
 
-const ActivityForm = ({ planId, setPlans, closeForm, theActivity }) => {
+const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily }) => {
   const activityFormRef = useRef(null)
 
   // interval input
-  const [theStartTime, setTheStartTime] = useState(theActivity?.startTime || "12:14")
-  const [theEndTime, setTheEndTime] = useState(theActivity?.endTime || "14:24")
-  const minTime = "09:00"
-  const maxTime = "18:00"
+  const minTime = isDaily ? "09:00" : "2024-11-01"
+  const maxTime = isDaily ? "19:00" : "2024-11-15"
+  const [theStartTime, setTheStartTime] = useState(theActivity?.startTime || minTime)
+  const [theEndTime, setTheEndTime] = useState(theActivity?.endTime || maxTime)
+  console.log(theStartTime)
 
   // name input
   const [theName, setTheName] = useState(theActivity?.name || "")
@@ -75,9 +76,9 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity }) => {
   return (
     <div ref={activityFormRef} className="test-container">
       <div className={`inline-block ${!isCorrectInterval && "outline outline-red-600 outline-4"}`}>
-        <IntervalInput theTime={theStartTime} setTheTime={setTheStartTime} />
+        <IntervalInput theTime={theStartTime} setTheTime={setTheStartTime} isDaily={isDaily} />
         <div>to</div>
-        <IntervalInput theTime={theEndTime} setTheTime={setTheEndTime} />
+        <IntervalInput theTime={theEndTime} setTheTime={setTheEndTime} isDaily={isDaily} />
       </div>
       <div className="inline-block ml-6">
         <NameInput theName={theName} setTheName={setTheName} />
@@ -102,11 +103,16 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity }) => {
   )
 }
 
-const IntervalInput = ({ theTime, setTheTime }) => {
+const IntervalInput = ({ theTime, setTheTime, isDaily }) => {
   const handleInput = e => setTheTime(e.target.value)
 
   return (
-    <input className={"text-black rounded"} type="time" value={theTime} onChange={handleInput} />
+    <input
+      className={"text-black rounded"}
+      type={isDaily ? "time" : "date"}
+      value={theTime}
+      onChange={handleInput}
+    />
   )
 }
 
