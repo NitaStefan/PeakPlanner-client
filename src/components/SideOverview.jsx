@@ -4,7 +4,7 @@ import Delete from "./icons/Delete"
 import Edit from "./icons/Edit"
 import deleteDbPlan from "../utils/restApiRequests/deletePlan"
 
-const SideOverview = ({ dailyPlans, goalPlans, setGoalPlans }) => {
+const SideOverview = ({ dailyPlans, goalPlans, setGoalPlans, setShowDailyPlans }) => {
   const [isAddingPlan, setIsAddingPlan] = useState(false)
   const [editingPlanId, setEditingPlanId] = useState(0)
 
@@ -15,7 +15,9 @@ const SideOverview = ({ dailyPlans, goalPlans, setGoalPlans }) => {
 
   return (
     <aside className="fixed w-60 border-2 rounded-lg padding-content">
-      <div className="text-lightText">Daily Routine</div>
+      <div className="text-lightText">
+        <button onClick={() => setShowDailyPlans(true)}>Daily Routine</button>
+      </div>
       <ul className="py-1">
         {dailyPlans &&
           dailyPlans.map(plan => (
@@ -27,7 +29,7 @@ const SideOverview = ({ dailyPlans, goalPlans, setGoalPlans }) => {
           ))}
       </ul>
       <div className="text-lightText group">
-        Goals{" "}
+        <button onClick={() => setShowDailyPlans(false)}>Goals</button>
         <button
           onClick={() => setIsAddingPlan(true)}
           className="float-right hidden group-hover:block"

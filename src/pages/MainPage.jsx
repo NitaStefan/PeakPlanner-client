@@ -25,7 +25,12 @@ const MainPage = () => {
 
   return (
     <main className="padding-y min-h-[600px]">
-      <SideOverview dailyPlans={dailyPlans} goalPlans={goalPlans} setGoalPlans={setGoalPlans} />
+      <SideOverview
+        dailyPlans={dailyPlans}
+        goalPlans={goalPlans}
+        setGoalPlans={setGoalPlans}
+        setShowDailyPlans={setShowDailyPlans}
+      />
       <Dashboard
         displayedPlans={displayedPlans}
         setDisplayedPlans={setDisplayedPlans}
