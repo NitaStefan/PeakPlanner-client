@@ -35,6 +35,13 @@ const PlanForm = ({ setGoalPlans, closeForm, thePlan }) => {
         onChange={e => setTheTitle(e.target.value)}
         value={theTitle}
         autoFocus
+        onKeyDown={e => {
+          if (e.key === "Enter")
+            if (theTitle !== "") {
+              handleAction()
+              closeForm()
+            } else closeForm()
+        }}
       />
       <button
         disabled={theTitle === ""}

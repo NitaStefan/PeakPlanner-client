@@ -7,6 +7,7 @@ import deleteDbActivity from "../../utils/restApiRequests/deleteActivity"
 import ActivityForm from "./ActivityForm"
 import { useState } from "react"
 import showTime from "../../utils/showTime"
+import inTitleCase from "../../utils/inTitleCase"
 
 const Activity = ({ activity, planId, setPlans }) => {
   const [editActivityActId, setEditActivityActId] = useState(0)
@@ -47,7 +48,7 @@ const ActivityInformation = ({ activity, planId, setPlans, openEditForm }) => {
       <Interval startTime={activity.startTime} endTime={activity.endTime} />
       <div className="inline-block grow mt-4 ml-4">
         <p className="text-tan text-xl mb-4">
-          {activity.name} <Priority priority={activity.priority} />
+          {inTitleCase(activity.name)} <Priority priority={activity.priority} />
         </p>
         <button
           className="border-2 rounded-md float-right mr-10"

@@ -3,6 +3,7 @@ import PlanForm from "./PlanForm"
 import Delete from "./icons/Delete"
 import Edit from "./icons/Edit"
 import deleteDbPlan from "../utils/restApiRequests/deletePlan"
+import inTitleCase from "../utils/inTitleCase"
 
 const SideOverview = ({ dailyPlans, goalPlans, setGoalPlans, setShowDailyPlans }) => {
   const [isAddingPlan, setIsAddingPlan] = useState(false)
@@ -43,7 +44,7 @@ const SideOverview = ({ dailyPlans, goalPlans, setGoalPlans, setShowDailyPlans }
             editingPlanId !== plan.id ? (
               <li key={plan.id} className="pl-4 py-2 group">
                 <a className="text-lightText" href="#">
-                  {plan.title}
+                  {inTitleCase(plan.title)}
                 </a>
                 <div className="float-right hidden group-hover:block">
                   <button onClick={() => setEditingPlanId(plan.id)}>

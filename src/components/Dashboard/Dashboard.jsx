@@ -2,6 +2,7 @@ import InitializeDailyPlans from "./InitializeDailyPlans"
 import ActivityForm from "./ActivityForm"
 import { useState } from "react"
 import Activity from "./Activity"
+import inTitleCase from "../../utils/inTitleCase"
 
 const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
   const [addActivityPlanId, setAddActivityPlanId] = useState(0)
@@ -13,9 +14,10 @@ const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
       {displayedPlans &&
         displayedPlans.map(plan => (
           <div key={plan.id}>
-            <div className="bg-medium my-2">{plan.title} </div>
+            <div className="bg-medium my-2">{inTitleCase(plan.title)} </div>
             {plan.activities &&
               plan.activities.map(activity => (
+                // TODO: define time constraints based on previous activity
                 <Activity
                   key={activity.id}
                   planId={plan.id}

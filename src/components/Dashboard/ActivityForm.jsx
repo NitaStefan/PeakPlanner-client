@@ -12,7 +12,6 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily }) => 
   const maxTime = isDaily ? "19:00" : "2024-11-15"
   const [theStartTime, setTheStartTime] = useState(theActivity?.startTime || minTime)
   const [theEndTime, setTheEndTime] = useState(theActivity?.endTime || maxTime)
-  console.log(theStartTime)
 
   // name input
   const [theName, setTheName] = useState(theActivity?.name || "")
