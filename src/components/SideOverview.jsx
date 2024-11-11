@@ -1,27 +1,26 @@
 import { useState } from "react"
-import persistPlan from "../utils/persistPlan"
+import PlanForm from "./PlanForm"
+import Delete from "./icons/Delete"
+import Edit from "./icons/Edit"
+import deleteDbPlan from "../utils/restApiRequests/deletePlan"
 
 const SideOverview = ({ dailyPlans, goalPlans, setGoalPlans }) => {
   const [isAddingPlan, setIsAddingPlan] = useState(false)
-  const [theTitle, setTheTitle] = useState("")
+  const [editingPlanId, setEditingPlanId] = useState(0)
 
-  const handleAddPlan = async () => {
-    const thePlan = { title: theTitle, type: "GOAL" }
-    const dbPlan = await persistPlan(thePlan)
-    setGoalPlans(prevPlans => [...prevPlans, dbPlan])
-    setIsAddingPlan(false)
+  const deletePlan = planId => {
+    setGoalPlans(prevPlans => prevPlans.filter(plan => plan.id !== planId))
+    deleteDbPlan(planId)
   }
 
-  //TODO : add click outside event for the title input
-
   return (
-    <aside className="fixed w-80 border-2 rounded-lg padding-content">
+    <aside className="fixed w-60 border-2 rounded-lg padding-content">
       <div className="text-lightText">Daily Routine</div>
       <ul className="py-1">
         {dailyPlans &&
           dailyPlans.map(plan => (
-            <li key={plan.id}>
-              <a className="pl-4 text-lightText" href="#">
+            <li key={plan.id} className="pl-4 py-2">
+              <a className="text-lightText" href="#">
                 {plan.title}
               </a>
             </li>
@@ -38,30 +37,33 @@ const SideOverview = ({ dailyPlans, goalPlans, setGoalPlans }) => {
       </div>
       <ul className="py-1">
         {goalPlans &&
-          goalPlans.map(plan => (
-            <li key={plan.id}>
-              <a className="pl-4 text-lightText" href="#">
-                {plan.title}
-              </a>
-            </li>
-          ))}
+          goalPlans.map(plan =>
+            editingPlanId !== plan.id ? (
+              <li key={plan.id} className="pl-4 py-2 group">
+                <a className="text-lightText" href="#">
+                  {plan.title}
+                </a>
+                <div className="float-right hidden group-hover:block">
+                  <button onClick={() => setEditingPlanId(plan.id)}>
+                    <Edit />
+                  </button>
+                  <button onClick={() => deletePlan(plan.id)}>
+                    <Delete />
+                  </button>
+                </div>
+              </li>
+            ) : (
+              <PlanForm
+                key={plan.id}
+                thePlan={plan}
+                setGoalPlans={setGoalPlans}
+                closeForm={() => setEditingPlanId(0)}
+              />
+            )
+          )}
       </ul>
       {isAddingPlan && (
-        <>
-          <input
-            className="pl-3"
-            type="text"
-            onChange={e => setTheTitle(e.target.value)}
-            value={theTitle}
-          />
-          <button
-            disabled={theTitle === ""}
-            onClick={() => handleAddPlan()}
-            className={`text-lightText px-2 ${theTitle === "" && "bg-gray-600"}`}
-          >
-            Add
-          </button>
-        </>
+        <PlanForm setGoalPlans={setGoalPlans} closeForm={() => setIsAddingPlan(false)} />
       )}
     </aside>
   )

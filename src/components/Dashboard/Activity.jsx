@@ -3,11 +3,32 @@ import DropDown from "../icons/DropDown"
 import CurvedArrow from "../icons/CurvedArrow"
 import Edit from "../icons/Edit"
 import Delete from "../icons/Delete"
-import deleteDbActivity from "../../utils/deleteActivity"
+import deleteDbActivity from "../../utils/restApiRequests/deleteActivity"
+import ActivityForm from "./ActivityForm"
 import { useState } from "react"
 
-const Activity = ({ activity, planId, setPlans, openEditForm }) => {
-  const [isOpen, setIsOpen] = useState(false)
+const Activity = ({ activity, planId, setPlans }) => {
+  const [editActivityActId, setEditActivityActId] = useState(0)
+
+  return editActivityActId !== activity.id ? (
+    <ActivityInformation
+      activity={activity}
+      planId={planId}
+      setPlans={setPlans}
+      openEditForm={() => setEditActivityActId(activity.id)}
+    />
+  ) : (
+    <ActivityForm
+      planId={planId}
+      theActivity={activity}
+      setPlans={setPlans}
+      closeForm={() => setEditActivityActId(0)}
+    />
+  )
+}
+
+const ActivityInformation = ({ activity, planId, setPlans, openEditForm }) => {
+  const [showSteps, setShowSteps] = useState(false)
 
   const deleteActivity = activityId => {
     setPlans(prevPlans =>
@@ -29,11 +50,11 @@ const Activity = ({ activity, planId, setPlans, openEditForm }) => {
         </p>
         <button
           className="border-2 rounded-md float-right mr-10"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setShowSteps(!showSteps)}
         >
           <DropDown />
         </button>
-        {isOpen ? (
+        {showSteps ? (
           <ul>
             {activity.steps.map(step => (
               <Step key={step.id} step={step} />
@@ -59,7 +80,7 @@ const Interval = ({ startTime, endTime }) => {
 }
 
 const Step = ({ step }) => (
-  <li key={step.id} className="my-4">
+  <li className="my-4">
     <p>{step.description}</p>
     <p>{step.duration}</p>
   </li>

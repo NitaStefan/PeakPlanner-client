@@ -1,6 +1,6 @@
 import weekdayWeekendPlans from "../../utils/createWorkWeekDayPlans"
 import daysOfWeekPlans from "../../utils/createDaysOfWeekPlans"
-import persistDailyPlans from "../../utils/persistDailyPlans"
+import persistDailyPlans from "../../utils/restApiRequests/persistDailyPlans"
 
 const InitializeDailyPlans = ({ setDailyPlans }) => {
   const byWeekdayWeekend = async () => {

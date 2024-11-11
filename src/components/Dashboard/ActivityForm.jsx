@@ -1,9 +1,12 @@
-import { useState } from "react"
-import persistActivity from "../../utils/persistActivity"
-import updateActivity from "../../utils/updateActivity"
+import { useRef, useState } from "react"
+import persistActivity from "../../utils/restApiRequests/persistActivity"
+import updateActivity from "../../utils/restApiRequests/updateActivity"
 import Close from "../icons/Close"
+import useClickOutside from "../hooks/useClickOutside"
 
 const ActivityForm = ({ planId, setPlans, closeForm, theActivity }) => {
+  const activityFormRef = useRef(null)
+
   // interval input
   const [theStartTime, setTheStartTime] = useState(theActivity?.startTime || "12:14")
   const [theEndTime, setTheEndTime] = useState(theActivity?.endTime || "14:24")
@@ -67,8 +70,10 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity }) => {
 
   const handleAction = formMode === "ADD" ? addTheActivity : updateTheActivity
 
+  useClickOutside(activityFormRef, () => closeForm())
+
   return (
-    <div className="test-container">
+    <div ref={activityFormRef} className="test-container">
       <div className={`inline-block ${!isCorrectInterval && "outline outline-red-600 outline-4"}`}>
         <IntervalInput theTime={theStartTime} setTheTime={setTheStartTime} />
         <div>to</div>
