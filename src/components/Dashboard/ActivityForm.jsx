@@ -3,15 +3,21 @@ import persistActivity from "../../utils/restApiRequests/persistActivity"
 import updateActivity from "../../utils/restApiRequests/updateActivity"
 import Close from "../icons/Close"
 import useClickOutside from "../hooks/useClickOutside"
+import getCurrentDate from "../../utils/getCurrentDate"
+import addOneToTimeOrDate from "../../utils/addOneToTimeOrDate"
 
-const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily }) => {
+const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTime, maxTime }) => {
   const activityFormRef = useRef(null)
 
+  const initialStartTime =
+    theActivity?.startTime || addOneToTimeOrDate(minTime) || (isDaily ? "08:00" : getCurrentDate())
+  const initialEndTime = theActivity?.endTime || addOneToTimeOrDate(initialStartTime)
+
+  const [isChoosingInput, setIsChoosingInput] = useState(false)
+
   // interval input
-  const minTime = isDaily ? "09:00" : "2024-11-01"
-  const maxTime = isDaily ? "19:00" : "2024-11-15"
-  const [theStartTime, setTheStartTime] = useState(theActivity?.startTime || minTime)
-  const [theEndTime, setTheEndTime] = useState(theActivity?.endTime || maxTime)
+  const [theStartTime, setTheStartTime] = useState(initialStartTime)
+  const [theEndTime, setTheEndTime] = useState(initialEndTime)
 
   // name input
   const [theName, setTheName] = useState(theActivity?.name || "")
@@ -29,7 +35,9 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily }) => 
   }
 
   const isCorrectInterval =
-    theStartTime >= minTime && theStartTime < theEndTime && theEndTime <= maxTime
+    (minTime === null || theStartTime >= minTime) &&
+    theStartTime < theEndTime &&
+    (maxTime === null || theEndTime <= maxTime)
 
   const addTheActivity = async () => {
     const dbActivity = await persistActivity(newActivity, planId)
@@ -102,6 +110,7 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily }) => 
   )
 }
 
+// The form components
 const IntervalInput = ({ theTime, setTheTime, isDaily }) => {
   const handleInput = e => setTheTime(e.target.value)
 
@@ -131,6 +140,7 @@ const NameInput = ({ theName, setTheName }) => {
         value={theName}
         onChange={handleName}
         id="activityName"
+        autoComplete="off"
       />
     </>
   )

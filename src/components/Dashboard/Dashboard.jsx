@@ -3,6 +3,7 @@ import ActivityForm from "./ActivityForm"
 import { useState } from "react"
 import Activity from "./Activity"
 import inTitleCase from "../../utils/inTitleCase"
+import getTimeConstraints from "../../utils/getTimeConstraints"
 
 const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
   const [addActivityPlanId, setAddActivityPlanId] = useState(0)
@@ -12,33 +13,51 @@ const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
   ) : (
     <section className="border-2 text-lightText padding-content ml-72">
       {displayedPlans &&
-        displayedPlans.map(plan => (
-          <div key={plan.id}>
-            <div className="bg-medium my-2">{inTitleCase(plan.title)} </div>
-            {plan.activities &&
-              plan.activities.map(activity => (
-                // TODO: define time constraints based on previous activity
-                <Activity
-                  key={activity.id}
+        displayedPlans.map(plan => {
+          const lastActivityEndTime =
+            plan.activities && plan.activities.length > 0
+              ? plan.activities[plan.activities.length - 1].endTime
+              : null
+
+          return (
+            <div key={plan.id}>
+              <div className="bg-medium my-2">{inTitleCase(plan.title)} </div>
+              {plan.activities &&
+                plan.activities.map((activity, index) => {
+                  const [minTime, maxTime] = getTimeConstraints(plan.activities, index)
+
+                  return (
+                    <Activity
+                      isDaily={isDaily}
+                      key={activity.id}
+                      planId={plan.id}
+                      activity={activity}
+                      setPlans={setDisplayedPlans}
+                      minTime={minTime}
+                      maxTime={maxTime}
+                    />
+                  )
+                })}
+
+              {addActivityPlanId !== plan.id ? (
+                !(isDaily && lastActivityEndTime > "23:00") && (
+                  <button onClick={() => setAddActivityPlanId(plan.id)} className="border-2 px-2">
+                    +
+                  </button>
+                )
+              ) : (
+                <ActivityForm
+                  isDaily={isDaily}
                   planId={plan.id}
-                  activity={activity}
                   setPlans={setDisplayedPlans}
+                  closeForm={() => setAddActivityPlanId(0)}
+                  minTime={lastActivityEndTime}
+                  maxTime={null}
                 />
-              ))}
-            {addActivityPlanId !== plan.id ? (
-              <button onClick={() => setAddActivityPlanId(plan.id)} className="border-2 px-2">
-                +
-              </button>
-            ) : (
-              <ActivityForm
-                isDaily={isDaily}
-                planId={plan.id}
-                setPlans={setDisplayedPlans}
-                closeForm={() => setAddActivityPlanId(0)}
-              />
-            )}
-          </div>
-        ))}
+              )}
+            </div>
+          )
+        })}
     </section>
   )
 }

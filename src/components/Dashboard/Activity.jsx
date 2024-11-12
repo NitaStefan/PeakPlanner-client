@@ -9,7 +9,7 @@ import { useState } from "react"
 import showTime from "../../utils/showTime"
 import inTitleCase from "../../utils/inTitleCase"
 
-const Activity = ({ activity, planId, setPlans }) => {
+const Activity = ({ activity, planId, setPlans, minTime, maxTime, isDaily }) => {
   const [editActivityActId, setEditActivityActId] = useState(0)
 
   return editActivityActId !== activity.id ? (
@@ -21,10 +21,13 @@ const Activity = ({ activity, planId, setPlans }) => {
     />
   ) : (
     <ActivityForm
+      isDaily={isDaily}
       planId={planId}
       theActivity={activity}
       setPlans={setPlans}
       closeForm={() => setEditActivityActId(0)}
+      minTime={minTime}
+      maxTime={maxTime}
     />
   )
 }
