@@ -11,12 +11,14 @@ import Tooltip from "../Tooltip"
 const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTime, maxTime }) => {
   const activityFormRef = useRef(null)
 
-  const basedOnMinTime = isDaily ? minTime : addOneToTimeOrDate(minTime)
   const initialStartTime =
-    theActivity?.startTime || basedOnMinTime || (isDaily ? "08:00" : getCurrentDate())
-  const initialEndTime = theActivity?.endTime || addOneToTimeOrDate(initialStartTime)
+    theActivity?.startTime || addOneToTimeOrDate(minTime) || (isDaily ? "08:00" : getCurrentDate())
+  const properEndTime =
+    isDaily && initialStartTime >= "23:00" ? "23:59" : addOneToTimeOrDate(initialStartTime)
+  const initialEndTime = theActivity?.endTime || properEndTime
 
-  // TODO: add interval error message
+  // TODO: solve on click outside when selecting input
+  // TODO: add only one minute to initialStartTime if hour is above 23:00 (and maybe add button hover)
 
   // interval input
   const [theStartTime, setTheStartTime] = useState(initialStartTime)
@@ -77,9 +79,9 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTi
   const handleAction = formMode === "ADD" ? addTheActivity : updateTheActivity
 
   const isCorrectInterval =
-    (minTime === null || theStartTime >= minTime) &&
+    (minTime === null || theStartTime > minTime) &&
     theStartTime < theEndTime &&
-    (maxTime === null || theEndTime <= maxTime)
+    (maxTime === null || theEndTime < maxTime)
 
   const tooltipContent = getIntervalErrorMsg(minTime, maxTime, isDaily, theStartTime, theEndTime)
 

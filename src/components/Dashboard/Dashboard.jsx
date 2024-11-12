@@ -40,7 +40,7 @@ const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
                 })}
 
               {addActivityPlanId !== plan.id ? (
-                !(isDaily && lastActivityEndTime >= "23:00") && (
+                !(isDaily && lastActivityEndTime >= "23:59") && (
                   <button onClick={() => setAddActivityPlanId(plan.id)} className="border-2 px-2">
                     +
                   </button>
