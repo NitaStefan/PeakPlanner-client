@@ -5,15 +5,18 @@ import Close from "../icons/Close"
 import useClickOutside from "../hooks/useClickOutside"
 import getCurrentDate from "../../utils/getCurrentDate"
 import addOneToTimeOrDate from "../../utils/addOneToTimeOrDate"
+import getIntervalErrorMsg from "../../utils/getIntervalErrorMsg"
+import Tooltip from "../Tooltip"
 
 const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTime, maxTime }) => {
   const activityFormRef = useRef(null)
 
+  const basedOnMinTime = isDaily ? minTime : addOneToTimeOrDate(minTime)
   const initialStartTime =
-    theActivity?.startTime || addOneToTimeOrDate(minTime) || (isDaily ? "08:00" : getCurrentDate())
+    theActivity?.startTime || basedOnMinTime || (isDaily ? "08:00" : getCurrentDate())
   const initialEndTime = theActivity?.endTime || addOneToTimeOrDate(initialStartTime)
 
-  const [isChoosingInput, setIsChoosingInput] = useState(false)
+  // TODO: add interval error message
 
   // interval input
   const [theStartTime, setTheStartTime] = useState(initialStartTime)
@@ -33,11 +36,6 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTi
     name: theName,
     priority: thePriority,
   }
-
-  const isCorrectInterval =
-    (minTime === null || theStartTime >= minTime) &&
-    theStartTime < theEndTime &&
-    (maxTime === null || theEndTime <= maxTime)
 
   const addTheActivity = async () => {
     const dbActivity = await persistActivity(newActivity, planId)
@@ -78,11 +76,23 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTi
 
   const handleAction = formMode === "ADD" ? addTheActivity : updateTheActivity
 
+  const isCorrectInterval =
+    (minTime === null || theStartTime >= minTime) &&
+    theStartTime < theEndTime &&
+    (maxTime === null || theEndTime <= maxTime)
+
+  const tooltipContent = getIntervalErrorMsg(minTime, maxTime, isDaily, theStartTime, theEndTime)
+
   useClickOutside(activityFormRef, () => closeForm())
 
   return (
     <div ref={activityFormRef} className="test-container">
-      <div className={`inline-block ${!isCorrectInterval && "outline outline-red-600 outline-4"}`}>
+      <div
+        className={`inline-block relative ${
+          !isCorrectInterval && "outline outline-red-600 outline-4"
+        }`}
+      >
+        <Tooltip isVisible={!isCorrectInterval} type={"ERROR"} content={tooltipContent} />
         <IntervalInput theTime={theStartTime} setTheTime={setTheStartTime} isDaily={isDaily} />
         <div>to</div>
         <IntervalInput theTime={theEndTime} setTheTime={setTheEndTime} isDaily={isDaily} />
@@ -141,6 +151,7 @@ const NameInput = ({ theName, setTheName }) => {
         onChange={handleName}
         id="activityName"
         autoComplete="off"
+        placeholder="Set the Activity Name"
       />
     </>
   )
