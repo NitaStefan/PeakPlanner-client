@@ -3,19 +3,14 @@ import persistActivity from "../../utils/restApiRequests/persistActivity"
 import updateActivity from "../../utils/restApiRequests/updateActivity"
 import Close from "../icons/Close"
 import useClickOutside from "../hooks/useClickOutside"
-import getCurrentDate from "../../utils/getCurrentDate"
-import addOneToTimeOrDate from "../../utils/addOneToTimeOrDate"
 import getIntervalErrorMsg from "../../utils/getIntervalErrorMsg"
+import getProperInitialTimes from "../../utils/getProperInitialTimes"
 import Tooltip from "../Tooltip"
 
 const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTime, maxTime }) => {
   const activityFormRef = useRef(null)
 
-  const initialStartTime =
-    theActivity?.startTime || addOneToTimeOrDate(minTime) || (isDaily ? "08:00" : getCurrentDate())
-  const properEndTime =
-    isDaily && initialStartTime >= "23:00" ? "23:59" : addOneToTimeOrDate(initialStartTime)
-  const initialEndTime = theActivity?.endTime || properEndTime
+  const [initialStartTime, initialEndTime] = getProperInitialTimes(theActivity, isDaily, minTime)
 
   // TODO: solve on click outside when selecting input
   // TODO: add only one minute to initialStartTime if hour is above 23:00 (and maybe add button hover)

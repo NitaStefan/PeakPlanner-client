@@ -8,6 +8,7 @@ import ActivityForm from "./ActivityForm"
 import { useState } from "react"
 import showTime from "../../utils/showTime"
 import inTitleCase from "../../utils/inTitleCase"
+import Step from "../Step"
 
 const Activity = ({ activity, planId, setPlans, minTime, maxTime, isDaily }) => {
   const [editActivityActId, setEditActivityActId] = useState(0)
@@ -83,13 +84,6 @@ const Interval = ({ startTime, endTime }) => {
     </div>
   )
 }
-
-const Step = ({ step }) => (
-  <li className="my-4">
-    <p>{step.description}</p>
-    <p>{step.duration}</p>
-  </li>
-)
 
 const ActionControls = ({ openEditForm, deleteItem }) => {
   return (

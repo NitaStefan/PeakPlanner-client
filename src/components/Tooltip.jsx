@@ -13,7 +13,7 @@ const Tooltip = ({ isVisible, type = "CLASSIC", content }) => {
 
   return (
     <div
-      class={`${bgColor} absolute bottom-full -translate-y-3 z-10 inline-block px-3 py-2 text-sm font-medium text-white rounded-lg`}
+      className={`${bgColor} w-40 absolute bottom-full -translate-y-3 z-10 inline-block px-3 py-2 text-sm font-medium text-white rounded-lg`}
     >
       {content}
     </div>
