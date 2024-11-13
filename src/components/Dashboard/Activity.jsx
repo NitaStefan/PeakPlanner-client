@@ -17,6 +17,7 @@ const Activity = ({ activity, planId, setPlans, minTime, maxTime, isDaily }) => 
     <div className="mt-8">
       {editActivityId !== activity.id ? (
         <ActivityInformation
+          isDaily={isDaily}
           activity={activity}
           planId={planId}
           setPlans={setPlans}
@@ -37,7 +38,7 @@ const Activity = ({ activity, planId, setPlans, minTime, maxTime, isDaily }) => 
   )
 }
 
-const ActivityInformation = ({ activity, planId, setPlans, openEditForm }) => {
+const ActivityInformation = ({ activity, planId, setPlans, openEditForm, isDaily }) => {
   const [showSteps, setShowSteps] = useState(false)
 
   const deleteActivity = activityId => {
@@ -62,7 +63,14 @@ const ActivityInformation = ({ activity, planId, setPlans, openEditForm }) => {
           <>
             <ul>
               {activity.steps.map(step => (
-                <Step key={step.id} step={step} />
+                <Step
+                  setPlans={setPlans}
+                  key={step.id}
+                  step={step}
+                  isDaily={isDaily}
+                  planId={planId}
+                  activityId={activity.id}
+                />
               ))}
             </ul>
             <button className="test-container">+</button>
@@ -97,29 +105,5 @@ const Interval = ({ startTime, endTime }) => {
     </div>
   )
 }
-
-// const updateStepCompletionInPlan = (planId, activityId, stepId, completed) => {
-//   setPlans(prevPlans =>
-//     prevPlans.map(plan =>
-//       plan.id === planId
-//         ? {
-//             ...plan,
-//             activities: plan.activities.map(activity =>
-//               activity.id === activityId
-//                 ? {
-//                     ...activity,
-//                     steps: activity.steps.map(step =>
-//                       step.id === stepId
-//                         ? { ...step, completed } // Update the specific step's completed value
-//                         : step // Return the unmodified step
-//                     )
-//                   }
-//                 : activity // Return the unmodified activity
-//             )
-//           }
-//         : plan // Return the unmodified plan
-//     )
-//   );
-// };
 
 export default Activity

@@ -2,7 +2,7 @@ import { useState } from "react"
 import ActionControls from "./ActionControls"
 import StepForm from "./StepForm"
 
-const Step = ({ step }) => {
+const Step = ({ step, isDaily, planId, activityId, setPlans }) => {
   const [editStepId, setEditStepId] = useState(0)
 
   return editStepId !== step.id ? (
@@ -12,7 +12,14 @@ const Step = ({ step }) => {
       <ActionControls iconSizeInRem={1} openEditForm={() => setEditStepId(step.id)} />
     </li>
   ) : (
-    <StepForm closeForm={() => setEditStepId(0)} />
+    <StepForm
+      theStep={step}
+      closeForm={() => setEditStepId(0)}
+      isDaily={isDaily}
+      planId={planId}
+      activityId={activityId}
+      setPlans={setPlans}
+    />
   )
 }
 
