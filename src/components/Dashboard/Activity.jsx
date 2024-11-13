@@ -1,35 +1,39 @@
 import Priority from "../icons/Priority"
 import DropDown from "../icons/DropDown"
 import CurvedArrow from "../icons/CurvedArrow"
-import Edit from "../icons/Edit"
-import Delete from "../icons/Delete"
 import deleteDbActivity from "../../utils/restApiRequests/deleteActivity"
 import ActivityForm from "./ActivityForm"
 import { useState } from "react"
 import showTime from "../../utils/showTime"
 import inTitleCase from "../../utils/inTitleCase"
 import Step from "../Step"
+import ActionControls from "../ActionControls"
 
 const Activity = ({ activity, planId, setPlans, minTime, maxTime, isDaily }) => {
-  const [editActivityActId, setEditActivityActId] = useState(0)
+  const [editActivityId, setEditActivityId] = useState(0)
+  const [addStepToActId, setAddStepToActId] = useState(0)
 
-  return editActivityActId !== activity.id ? (
-    <ActivityInformation
-      activity={activity}
-      planId={planId}
-      setPlans={setPlans}
-      openEditForm={() => setEditActivityActId(activity.id)}
-    />
-  ) : (
-    <ActivityForm
-      isDaily={isDaily}
-      planId={planId}
-      theActivity={activity}
-      setPlans={setPlans}
-      closeForm={() => setEditActivityActId(0)}
-      minTime={minTime}
-      maxTime={maxTime}
-    />
+  return (
+    <div className="mt-8">
+      {editActivityId !== activity.id ? (
+        <ActivityInformation
+          activity={activity}
+          planId={planId}
+          setPlans={setPlans}
+          openEditForm={() => setEditActivityId(activity.id)}
+        />
+      ) : (
+        <ActivityForm
+          isDaily={isDaily}
+          planId={planId}
+          theActivity={activity}
+          setPlans={setPlans}
+          closeForm={() => setEditActivityId(0)}
+          minTime={minTime}
+          maxTime={maxTime}
+        />
+      )}
+    </div>
   )
 }
 
@@ -54,23 +58,32 @@ const ActivityInformation = ({ activity, planId, setPlans, openEditForm }) => {
         <p className="text-tan text-xl mb-4">
           {inTitleCase(activity.name)} <Priority priority={activity.priority} />
         </p>
-        <button
-          className="border-2 rounded-md float-right mr-10"
-          onClick={() => setShowSteps(!showSteps)}
-        >
-          <DropDown />
-        </button>
         {showSteps ? (
-          <ul>
-            {activity.steps.map(step => (
-              <Step key={step.id} step={step} />
-            ))}
-          </ul>
+          <>
+            <ul>
+              {activity.steps.map(step => (
+                <Step key={step.id} step={step} />
+              ))}
+            </ul>
+            <button className="test-container">+</button>
+          </>
         ) : (
           <div>Steps to follow: {activity.steps.length} </div>
         )}
       </div>
-      <ActionControls openEditForm={openEditForm} deleteItem={() => deleteActivity(activity.id)} />
+      <div>
+        <ActionControls
+          openEditForm={openEditForm}
+          deleteItem={() => deleteActivity(activity.id)}
+          iconSizeInRem={1.4}
+        />
+        <button
+          className="border-2 rounded-md float-right ml-2 mr-8"
+          onClick={() => setShowSteps(!showSteps)}
+        >
+          <DropDown />
+        </button>
+      </div>
     </div>
   )
 }
@@ -81,21 +94,6 @@ const Interval = ({ startTime, endTime }) => {
       <p>{showTime(startTime)}</p>
       <CurvedArrow />
       <p>{showTime(endTime)}</p>
-    </div>
-  )
-}
-
-const ActionControls = ({ openEditForm, deleteItem }) => {
-  return (
-    <div className="w-12">
-      <div className="hidden group-hover:block pl-2">
-        <button className="mt-2 block" onClick={deleteItem}>
-          <Delete />
-        </button>
-        <button className="mt-2 block" onClick={openEditForm}>
-          <Edit />
-        </button>
-      </div>
     </div>
   )
 }

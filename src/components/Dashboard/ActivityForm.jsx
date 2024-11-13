@@ -12,9 +12,6 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTi
 
   const [initialStartTime, initialEndTime] = getProperInitialTimes(theActivity, isDaily, minTime)
 
-  // TODO: solve on click outside when selecting input
-  // TODO: add only one minute to initialStartTime if hour is above 23:00 (and maybe add button hover)
-
   // interval input
   const [theStartTime, setTheStartTime] = useState(initialStartTime)
   const [theEndTime, setTheEndTime] = useState(initialEndTime)

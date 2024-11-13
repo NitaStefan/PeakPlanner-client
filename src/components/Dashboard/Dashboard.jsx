@@ -6,7 +6,7 @@ import inTitleCase from "../../utils/inTitleCase"
 import getTimeConstraints from "../../utils/getTimeConstraints"
 
 const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
-  const [addActivityPlanId, setAddActivityPlanId] = useState(0)
+  const [addActivityToPlanId, setAddActivityToPlanId] = useState(0)
 
   return isDaily && displayedPlans !== null && displayedPlans.length === 0 ? (
     <InitializeDailyPlans setDailyPlans={setDisplayedPlans} />
@@ -39,9 +39,9 @@ const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
                   )
                 })}
 
-              {addActivityPlanId !== plan.id ? (
+              {addActivityToPlanId !== plan.id ? (
                 !(isDaily && lastActivityEndTime >= "23:59") && (
-                  <button onClick={() => setAddActivityPlanId(plan.id)} className="border-2 px-2">
+                  <button onClick={() => setAddActivityToPlanId(plan.id)} className="border-2 px-2">
                     +
                   </button>
                 )
@@ -50,7 +50,7 @@ const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
                   isDaily={isDaily}
                   planId={plan.id}
                   setPlans={setDisplayedPlans}
-                  closeForm={() => setAddActivityPlanId(0)}
+                  closeForm={() => setAddActivityToPlanId(0)}
                   minTime={lastActivityEndTime}
                   maxTime={null}
                 />
