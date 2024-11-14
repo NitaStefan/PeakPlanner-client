@@ -8,10 +8,10 @@ import showTime from "../../utils/showTime"
 import inTitleCase from "../../utils/inTitleCase"
 import Step from "../Step"
 import ActionControls from "../ActionControls"
+import StepForm from "../StepForm"
 
 const Activity = ({ activity, planId, setPlans, minTime, maxTime, isDaily }) => {
   const [editActivityId, setEditActivityId] = useState(0)
-  const [addStepToActId, setAddStepToActId] = useState(0)
 
   return (
     <div className="mt-8">
@@ -40,6 +40,7 @@ const Activity = ({ activity, planId, setPlans, minTime, maxTime, isDaily }) => 
 
 const ActivityInformation = ({ activity, planId, setPlans, openEditForm, isDaily }) => {
   const [showSteps, setShowSteps] = useState(false)
+  const [addStepToActId, setAddStepToActId] = useState(0)
 
   const deleteActivity = activityId => {
     setPlans(prevPlans =>
@@ -73,10 +74,35 @@ const ActivityInformation = ({ activity, planId, setPlans, openEditForm, isDaily
                 />
               ))}
             </ul>
-            <button className="test-container">+</button>
+            {addStepToActId !== activity.id ? (
+              <button onClick={() => setAddStepToActId(activity.id)} className="border-2 px-1">
+                +
+              </button>
+            ) : (
+              <StepForm
+                closeForm={() => setAddStepToActId(0)}
+                isDaily={isDaily}
+                planId={planId}
+                activityId={activity.id}
+                setPlans={setPlans}
+              />
+            )}
           </>
         ) : (
-          <div>Steps to follow: {activity.steps.length} </div>
+          <div>
+            Steps to follow: {activity.steps.length}{" "}
+            {activity.steps.length === 0 && (
+              <button
+                onClick={() => {
+                  setAddStepToActId(activity.id)
+                  setShowSteps(true)
+                }}
+                className="border-2 px-1"
+              >
+                +
+              </button>
+            )}
+          </div>
         )}
       </div>
       <div>

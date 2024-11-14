@@ -1,25 +1,49 @@
 import { useRef, useState } from "react"
 import useClickOutside from "./hooks/useClickOutside"
+import updateDbStep from "../utils/restApiRequests/updateStep"
+import persistStep from "../utils/restApiRequests/persistStep"
+import getInitialStepValues from "../utils/getInitialStepValues"
+import getHoursMinutesString from "../utils/getHoursMinutesString"
 
 const StepForm = ({ closeForm, theStep, isDaily, planId, activityId, setPlans }) => {
-  const initialDescription = "nothing"
-
   const stepFormRef = useRef(null)
 
-  const [hours, setHours] = useState(1)
-  const [minutes, setMinutes] = useState(35)
-  const [days, setDays] = useState(1)
-  const [description, setDescription] = useState(initialDescription)
+  const [initHours, initMinutes, initDays, initDescription] = getInitialStepValues(theStep, isDaily)
+
+  const [hours, setHours] = useState(initHours)
+  const [minutes, setMinutes] = useState(initMinutes)
+  const [days, setDays] = useState(initDays)
+  const [description, setDescription] = useState(initDescription)
 
   const handleHoursChange = event => setHours(parseInt(event.target.value))
   const handleMinutesChange = event => setMinutes(parseInt(event.target.value))
   const handleDaysChange = event => setDays(parseInt(event.target.value))
   const handleDescription = event => setDescription(event.target.value)
 
-  const duration = isDaily ? `${hours}h ${minutes}m` : `${days} days`
+  const duration = isDaily ? getHoursMinutesString(hours, minutes) : `${days}d`
   const newStep = { duration: duration, description: description }
 
-  const addTheStep = () => {}
+  const addTheStep = async () => {
+    const dbStep = await persistStep(newStep, activityId)
+
+    setPlans(prevPlans =>
+      prevPlans.map(plan =>
+        plan.id === planId
+          ? {
+              ...plan,
+              activities: plan.activities.map(activity =>
+                activity.id === activityId
+                  ? {
+                      ...activity,
+                      steps: [...activity.steps, dbStep],
+                    }
+                  : activity
+              ),
+            }
+          : plan
+      )
+    )
+  }
 
   const updateTheStep = () => {
     setPlans(prevPlans =>
@@ -43,7 +67,8 @@ const StepForm = ({ closeForm, theStep, isDaily, planId, activityId, setPlans })
           : plan
       )
     )
-    // TODO: Also update the step from the db
+
+    updateDbStep(newStep, theStep.id)
   }
 
   const formType = theStep ? "UPDATE" : "ADD"
@@ -105,8 +130,8 @@ const GoalDurationInput = ({ days, handleDaysChange }) => (
   <>
     <select value={days} onChange={handleDaysChange}>
       {Array.from({ length: 10 }, (_, i) => (
-        <option key={i} value={i}>
-          {i}
+        <option key={i + 1} value={i + 1}>
+          {i + 1}
         </option>
       ))}
     </select>

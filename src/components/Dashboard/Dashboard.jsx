@@ -4,6 +4,8 @@ import { useState } from "react"
 import Activity from "./Activity"
 import inTitleCase from "../../utils/inTitleCase"
 import getTimeConstraints from "../../utils/getTimeConstraints"
+import calculateTimeInterval from "../../utils/calculateTimeInterval"
+import calculateDateInterval from "../../utils/calculateDateInterval"
 
 const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
   const [addActivityToPlanId, setAddActivityToPlanId] = useState(0)
@@ -24,7 +26,13 @@ const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
               <div className="bg-medium my-2">{inTitleCase(plan.title)} </div>
               {plan.activities &&
                 plan.activities.map((activity, index) => {
-                  const [minTime, maxTime] = getTimeConstraints(plan.activities, index)
+                  const [prevActEndTime, nextActStartTime] = getTimeConstraints(
+                    plan.activities,
+                    index
+                  )
+                  const breakTime = isDaily
+                    ? calculateTimeInterval(prevActEndTime, nextActStartTime)
+                    : calculateDateInterval(prevActEndTime, nextActStartTime)
 
                   return (
                     <Activity
@@ -33,8 +41,8 @@ const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
                       planId={plan.id}
                       activity={activity}
                       setPlans={setDisplayedPlans}
-                      minTime={minTime}
-                      maxTime={maxTime}
+                      minTime={prevActEndTime}
+                      maxTime={nextActStartTime}
                     />
                   )
                 })}
