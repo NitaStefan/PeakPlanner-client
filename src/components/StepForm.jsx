@@ -3,7 +3,7 @@ import useClickOutside from "./hooks/useClickOutside"
 import updateDbStep from "../utils/restApiRequests/updateStep"
 import persistStep from "../utils/restApiRequests/persistStep"
 import getInitialStepValues from "../utils/getInitialStepValues"
-import getHoursMinutesString from "../utils/getHoursMinutesString"
+import removeZeroTimeValues from "../utils/removeZeroTimeValues"
 
 const StepForm = ({ closeForm, theStep, isDaily, planId, activityId, setPlans }) => {
   const stepFormRef = useRef(null)
@@ -20,7 +20,7 @@ const StepForm = ({ closeForm, theStep, isDaily, planId, activityId, setPlans })
   const handleDaysChange = event => setDays(parseInt(event.target.value))
   const handleDescription = event => setDescription(event.target.value)
 
-  const duration = isDaily ? getHoursMinutesString(hours, minutes) : `${days}d`
+  const duration = isDaily ? removeZeroTimeValues(`${hours}h ${minutes}m`) : `${days}d`
   const newStep = { duration: duration, description: description }
 
   const addTheStep = async () => {

@@ -9,6 +9,11 @@ import inTitleCase from "../../utils/inTitleCase"
 import Step from "../Step"
 import ActionControls from "../ActionControls"
 import StepForm from "../StepForm"
+import calculateTimeInterval from "../../utils/calculateTimeInterval"
+import calculateDateInterval from "../../utils/calculateDateInterval"
+import removeZeroTimeValues from "../../utils/removeZeroTimeValues"
+import addDurationStrings from "../../utils/addDurationStrings"
+import subtractDurationStrings from "../../utils/subtractDurationStrings"
 
 const Activity = ({ activity, planId, setPlans, minTime, maxTime, isDaily }) => {
   const [editActivityId, setEditActivityId] = useState(0)
@@ -53,6 +58,16 @@ const ActivityInformation = ({ activity, planId, setPlans, openEditForm, isDaily
     deleteDbActivity(activityId)
   }
 
+  const intervalTime = isDaily
+    ? calculateTimeInterval(activity.startTime, activity.endTime)
+    : calculateDateInterval(activity.startTime, activity.endTime)
+
+  const totalStepsTime = activity.steps.reduce(
+    (total, currStep) => addDurationStrings(total, currStep.duration),
+    ""
+  )
+  const stepsTimeLeft = subtractDurationStrings(intervalTime, totalStepsTime)
+
   return (
     <div key={activity.id} className="flex pl-4 group">
       <Interval startTime={activity.startTime} endTime={activity.endTime} />
@@ -74,6 +89,7 @@ const ActivityInformation = ({ activity, planId, setPlans, openEditForm, isDaily
                 />
               ))}
             </ul>
+            <div>Interval time left: {stepsTimeLeft}</div>
             {addStepToActId !== activity.id ? (
               <button onClick={() => setAddStepToActId(activity.id)} className="border-2 px-1">
                 +
@@ -90,7 +106,8 @@ const ActivityInformation = ({ activity, planId, setPlans, openEditForm, isDaily
           </>
         ) : (
           <div>
-            Steps to follow: {activity.steps.length}{" "}
+            Steps to follow: {activity.steps.length}
+            {", "}Interval Time: {removeZeroTimeValues(intervalTime)}{" "}
             {activity.steps.length === 0 && (
               <button
                 onClick={() => {
