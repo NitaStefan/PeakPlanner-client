@@ -80,6 +80,7 @@ const ActivityInformation = ({ activity, planId, setPlans, openEditForm, isDaily
             <ul>
               {activity.steps.map(step => (
                 <Step
+                  stepsTimeLeft={stepsTimeLeft}
                   setPlans={setPlans}
                   key={step.id}
                   step={step}
@@ -89,19 +90,24 @@ const ActivityInformation = ({ activity, planId, setPlans, openEditForm, isDaily
                 />
               ))}
             </ul>
-            <div>Interval time left: {stepsTimeLeft}</div>
-            {addStepToActId !== activity.id ? (
-              <button onClick={() => setAddStepToActId(activity.id)} className="border-2 px-1">
-                +
-              </button>
-            ) : (
-              <StepForm
-                closeForm={() => setAddStepToActId(0)}
-                isDaily={isDaily}
-                planId={planId}
-                activityId={activity.id}
-                setPlans={setPlans}
-              />
+            {stepsTimeLeft !== "" && (
+              <>
+                <div>Interval time left: {stepsTimeLeft}</div>
+                {addStepToActId !== activity.id ? (
+                  <button onClick={() => setAddStepToActId(activity.id)} className="border-2 px-1">
+                    +
+                  </button>
+                ) : (
+                  <StepForm
+                    stepsTimeLeft={stepsTimeLeft}
+                    closeForm={() => setAddStepToActId(0)}
+                    isDaily={isDaily}
+                    planId={planId}
+                    activityId={activity.id}
+                    setPlans={setPlans}
+                  />
+                )}
+              </>
             )}
           </>
         ) : (

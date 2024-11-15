@@ -3,7 +3,7 @@ import ActionControls from "./ActionControls"
 import StepForm from "./StepForm"
 import deleteDbStep from "../utils/restApiRequests/deleteStep"
 
-const Step = ({ step, isDaily, planId, activityId, setPlans }) => {
+const Step = ({ step, isDaily, planId, activityId, setPlans, stepsTimeLeft }) => {
   const [editStepId, setEditStepId] = useState(0)
 
   const deleteStep = stepId => {
@@ -36,6 +36,7 @@ const Step = ({ step, isDaily, planId, activityId, setPlans }) => {
     </li>
   ) : (
     <StepForm
+      stepsTimeLeft={stepsTimeLeft}
       theStep={step}
       closeForm={() => setEditStepId(0)}
       isDaily={isDaily}
