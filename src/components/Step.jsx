@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, Fragment } from "react"
 import ActionControls from "./ActionControls"
 import StepForm from "./StepForm"
 import deleteDbStep from "../utils/restApiRequests/deleteStep"
@@ -27,7 +27,14 @@ const Step = ({ step, isDaily, planId, activityId, setPlans, stepsTimeLeft }) =>
   return editStepId !== step.id ? (
     <li className="flex my-4">
       <div>{step.duration}</div>
-      <div className="ml-2 grow">{step.description}</div>
+      <div className="ml-2 grow">
+        {step.description.split("\n").map((line, index) => (
+          <Fragment key={index}>
+            {line}
+            <br />
+          </Fragment>
+        ))}
+      </div>
       <ActionControls
         iconSizeInRem={1}
         openEditForm={() => setEditStepId(step.id)}

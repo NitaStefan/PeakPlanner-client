@@ -44,7 +44,7 @@ const Activity = ({ activity, planId, setPlans, minTime, maxTime, isDaily }) => 
 }
 
 const ActivityInformation = ({ activity, planId, setPlans, openEditForm, isDaily }) => {
-  const [showSteps, setShowSteps] = useState(false)
+  const [showSteps, setShowSteps] = useState(false) // TODO: replace showSteps using the activity id
   const [addStepToActId, setAddStepToActId] = useState(0)
 
   const deleteActivity = activityId => {

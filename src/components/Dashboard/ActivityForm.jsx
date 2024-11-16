@@ -71,9 +71,9 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTi
   const handleAction = formMode === "ADD" ? addTheActivity : updateTheActivity
 
   const isCorrectInterval =
-    (minTime === null || theStartTime > minTime) &&
+    (minTime === null || (isDaily ? theStartTime >= minTime : theStartTime > minTime)) &&
     theStartTime < theEndTime &&
-    (maxTime === null || theEndTime < maxTime)
+    (maxTime === null || (isDaily ? theEndTime <= maxTime : theEndTime < maxTime))
 
   const tooltipContent = getIntervalErrorMsg(minTime, maxTime, isDaily, theStartTime, theEndTime)
 

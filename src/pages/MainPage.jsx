@@ -3,7 +3,8 @@ import Dashboard from "../components/Dashboard/Dashboard"
 import { useEffect, useState } from "react"
 
 const MainPage = () => {
-  const [showDailyPlans, setShowDailyPlans] = useState(false)
+  // TODO remove the need to have the function that removes 0 values from duration
+  const [showDailyPlans, setShowDailyPlans] = useState(true)
 
   const [dailyPlans, setDailyPlans] = useState(null)
   const [goalPlans, setGoalPlans] = useState(null)

@@ -24,6 +24,7 @@ const StepForm = ({ closeForm, theStep, isDaily, planId, activityId, setPlans, s
 
   const duration = isDaily ? removeZeroTimeValues(`${hours}h ${minutes}m`) : `${days}d`
   const newStep = { duration: duration, description: description }
+  console.log(newStep)
 
   const addTheStep = async () => {
     const dbStep = await persistStep(newStep, activityId)

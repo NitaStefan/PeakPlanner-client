@@ -1,6 +1,6 @@
 export default [
   {
-    title: "Weekday",
+    title: "Workday",
     type: "ROUTINE",
   },
   {

@@ -13,7 +13,7 @@ const BreakTime = ({ breakTime }) => {
 
   breakTime = subtractOneDay(breakTime)
 
-  return breakTime !== null && breakTime !== "0h 1m" && breakTime !== "0d" ? (
+  return breakTime !== null && breakTime !== "0h 1m" && breakTime !== "0d" && breakTime !== "" ? (
     <div className="test-container bg-tan">{removeZeroTimeValues(breakTime)}</div>
   ) : null
 }
