@@ -3,14 +3,14 @@ import useClickOutside from "./hooks/useClickOutside"
 import updateDbStep from "../utils/restApiRequests/updateStep"
 import persistStep from "../utils/restApiRequests/persistStep"
 import getInitialStepValues from "../utils/getInitialStepValues"
-import removeZeroTimeValues from "../utils/removeZeroTimeValues"
 import addDurationStrings from "../utils/addDurationStrings"
 import extractDurationParts from "../utils/extractDurationParts"
+import durationPartsToString from "../utils/durationPartsToString"
 
 const StepForm = ({ closeForm, theStep, isDaily, planId, activityId, setPlans, stepsTimeLeft }) => {
   const stepFormRef = useRef(null)
 
-  const [initDays, initHours, initMinutes, initDescription] = getInitialStepValues(theStep, isDaily)
+  const [initDays, initHours, initMinutes, initDescription] = getInitialStepValues(theStep)
 
   const [hours, setHours] = useState(initHours)
   const [minutes, setMinutes] = useState(initMinutes)
@@ -22,9 +22,8 @@ const StepForm = ({ closeForm, theStep, isDaily, planId, activityId, setPlans, s
   const handleDaysChange = event => setDays(parseInt(event.target.value))
   const handleDescription = event => setDescription(event.target.value)
 
-  const duration = isDaily ? removeZeroTimeValues(`${hours}h ${minutes}m`) : `${days}d`
+  const duration = durationPartsToString({ days, hours, minutes })
   const newStep = { duration: duration, description: description }
-  console.log(newStep)
 
   const addTheStep = async () => {
     const dbStep = await persistStep(newStep, activityId)

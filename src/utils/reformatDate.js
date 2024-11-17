@@ -1,4 +1,4 @@
-const showTime = input => {
+const reformatDate = input => {
   const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
   if (dateRegex.test(input)) {
@@ -12,4 +12,4 @@ const showTime = input => {
   } else return input
 }
 
-export default showTime
+export default reformatDate

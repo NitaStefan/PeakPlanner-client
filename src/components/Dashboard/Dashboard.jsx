@@ -33,14 +33,15 @@ const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
                     index
                   )
 
-                  let breakTime = null
+                  let breakTime = ""
                   if (index === 0) {
-                    if (isDaily)
+                    if (isDaily) {
                       breakTime = addDurationStrings(
-                        // TODO: add one minute to that interval
                         calculateTimeInterval(lastActivityEndTime, "23:59"),
                         calculateTimeInterval("00:00", activity.startTime)
                       )
+                      breakTime = addDurationStrings(breakTime, "1m")
+                    }
                   } else
                     breakTime = isDaily
                       ? calculateTimeInterval(prevActEndTime, activity.startTime)

@@ -9,8 +9,8 @@ function calculateDateInterval(startDate, endDate) {
   // Convert milliseconds to days
   const diffDays = Math.floor(diffMilliseconds / (1000 * 60 * 60 * 24))
 
-  // Return the result as a string
-  return `${diffDays}d`
+  // Return the result as a string only if there are days
+  return diffDays > 0 ? `${diffDays}d` : ""
 }
 
 export default calculateDateInterval

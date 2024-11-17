@@ -44,13 +44,13 @@ export default [
       },
       {
         name: "My first working session",
-        startTime: "10:46",
+        startTime: "10:45",
         endTime: "13:30",
         priority: "HIGH",
         steps: [
           {
             description: "continue working on <@task1>",
-            duration: "2h 34m",
+            duration: "2h 35m",
           },
           {
             description: "review to work done and leave TODOs",
@@ -60,13 +60,13 @@ export default [
       },
       {
         name: "Mindfulness",
-        startTime: "13:31",
+        startTime: "13:30",
         endTime: "14:00",
         priority: "LIGHT",
         steps: [
           {
             description: "practice meditation and gratitude",
-            duration: "29m",
+            duration: "30m",
           },
         ],
       },
@@ -78,7 +78,7 @@ export default [
         steps: [
           {
             description: "cook or order a meal rich in protein and healthy fats",
-            duration: "29m",
+            duration: "30m",
           },
         ],
       },
@@ -91,20 +91,20 @@ export default [
           {
             description:
               "check the current task for <@task2> and make sure you eliminate disctractions",
-            duration: "2h 54m",
+            duration: "2h 55m",
           },
         ],
       },
       {
         name: "Have dinner",
-        startTime: "18:26",
+        startTime: "18:25",
         endTime: "19:00",
         priority: "HIGH",
         steps: [
           {
             description:
               "Opt for a light meal to enhance the night's sleep quality\n Discuss with family members about their day",
-            duration: "34m",
+            duration: "35m",
           },
         ],
       },
@@ -122,7 +122,7 @@ export default [
       },
       {
         name: "Evening Routine",
-        startTime: "20:31",
+        startTime: "20:30",
         endTime: "23:00",
         priority: "HIGH",
         steps: [
@@ -136,7 +136,7 @@ export default [
           },
           {
             description: "read a few pages before sleep time",
-            duration: "34m",
+            duration: "35m",
           },
         ],
       },

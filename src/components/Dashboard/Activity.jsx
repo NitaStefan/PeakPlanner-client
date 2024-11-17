@@ -4,14 +4,13 @@ import CurvedArrow from "../icons/CurvedArrow"
 import deleteDbActivity from "../../utils/restApiRequests/deleteActivity"
 import ActivityForm from "./ActivityForm"
 import { useState } from "react"
-import showTime from "../../utils/showTime"
+import reformatDate from "../../utils/reformatDate"
 import inTitleCase from "../../utils/inTitleCase"
 import Step from "../Step"
 import ActionControls from "../ActionControls"
 import StepForm from "../StepForm"
 import calculateTimeInterval from "../../utils/calculateTimeInterval"
 import calculateDateInterval from "../../utils/calculateDateInterval"
-import removeZeroTimeValues from "../../utils/removeZeroTimeValues"
 import addDurationStrings from "../../utils/addDurationStrings"
 import subtractDurationStrings from "../../utils/subtractDurationStrings"
 
@@ -112,8 +111,8 @@ const ActivityInformation = ({ activity, planId, setPlans, openEditForm, isDaily
           </>
         ) : (
           <div>
-            Steps to follow: {activity.steps.length}
-            {", "}Interval Time: {removeZeroTimeValues(intervalTime)}{" "}
+            Steps: {activity.steps.length}
+            {", "}Interval Time: {intervalTime}
             {activity.steps.length === 0 && (
               <button
                 onClick={() => {
@@ -148,9 +147,9 @@ const ActivityInformation = ({ activity, planId, setPlans, openEditForm, isDaily
 const Interval = ({ startTime, endTime }) => {
   return (
     <div className="inline-flex items-center flex-col mt-4">
-      <p>{showTime(startTime)}</p>
+      <p>{reformatDate(startTime)}</p>
       <CurvedArrow />
-      <p>{showTime(endTime)}</p>
+      <p>{reformatDate(endTime)}</p>
     </div>
   )
 }

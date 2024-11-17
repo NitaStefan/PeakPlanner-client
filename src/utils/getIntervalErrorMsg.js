@@ -1,4 +1,4 @@
-import showTime from "./showTime"
+import showTime from "./reformatDate"
 
 const getIntervalErrorMsg = (minTime, maxTime, isDaily, theStartTime, theEndTime) => {
   const theType = isDaily ? "time " : "date "

@@ -14,8 +14,13 @@ function calculateTimeInterval(startTime, endTime) {
   const hours = Math.floor(diffMinutes / 60)
   const minutes = diffMinutes % 60
 
-  // Return the result as a string
-  return `${hours}h ${minutes}m`
+  // Dynamically construct the result string
+  const parts = []
+  if (hours > 0) parts.push(`${hours}h`)
+  if (minutes > 0) parts.push(`${minutes}m`)
+
+  // Return the formatted result
+  return parts.join(" ")
 }
 
 export default calculateTimeInterval

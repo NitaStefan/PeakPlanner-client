@@ -4,7 +4,7 @@ import addOneMinute from "./addOneMinute"
 
 const getProperInitialTimes = (theActivity, isDaily, minTime) => {
   const basedOnMinTime =
-    isDaily && minTime && minTime >= "23:00" ? addOneMinute(minTime) : addOneToTimeOrDate(minTime)
+    isDaily && minTime && minTime >= "23:00" ? addOneMinute(minTime) : addOneToTimeOrDate(minTime) // one hour or one day
 
   const initialStartTime =
     theActivity?.startTime || basedOnMinTime || (isDaily ? "08:00" : getCurrentDate())
