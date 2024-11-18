@@ -1,27 +1,22 @@
 import SideOverview from "../components/SideOverview"
 import Dashboard from "../components/Dashboard/Dashboard"
-import { useEffect, useState } from "react"
+import { useState } from "react"
+import usePlansOfType from "../components/hooks/usePlansOfType"
 
 const MainPage = () => {
   const [showDailyPlans, setShowDailyPlans] = useState(true)
 
-  const [dailyPlans, setDailyPlans] = useState(null)
-  const [goalPlans, setGoalPlans] = useState(null)
+  const {
+    plans: dailyPlans,
+    setPlans: setDailyPlans,
+    loading: loadingDaily,
+  } = usePlansOfType("ROUTINE")
 
-  useEffect(() => {
-    fetch("http://localhost:8080/api/plans?type=ROUTINE")
-      .then(res => res.json())
-      .then(data => setDailyPlans(data))
-  }, [])
-
-  useEffect(() => {
-    fetch("http://localhost:8080/api/plans?type=GOAL")
-      .then(res => res.json())
-      .then(data => setGoalPlans(data))
-  }, [])
+  const { plans: goalPlans, setPlans: setGoalPlans, loading: loadingGoal } = usePlansOfType("GOAL")
 
   const displayedPlans = showDailyPlans ? dailyPlans : goalPlans
   const setDisplayedPlans = showDailyPlans ? setDailyPlans : setGoalPlans
+  const currentLoading = showDailyPlans ? loadingDaily : loadingGoal
 
   return (
     <main className="padding-y min-h-[600px]">
@@ -31,11 +26,15 @@ const MainPage = () => {
         setGoalPlans={setGoalPlans}
         setShowDailyPlans={setShowDailyPlans}
       />
-      <Dashboard
-        displayedPlans={displayedPlans}
-        setDisplayedPlans={setDisplayedPlans}
-        isDaily={showDailyPlans}
-      />
+      {currentLoading ? (
+        <p className="border-2 border-tan text-lightText ml-72">Loading...</p>
+      ) : (
+        <Dashboard
+          displayedPlans={displayedPlans}
+          setDisplayedPlans={setDisplayedPlans}
+          isDaily={showDailyPlans}
+        />
+      )}
     </main>
   )
 }

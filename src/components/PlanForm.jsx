@@ -11,6 +11,7 @@ const PlanForm = ({ setGoalPlans, closeForm, thePlan }) => {
 
   const handleAddPlan = async () => {
     const dbPlan = await persistPlan(newPlan)
+
     setGoalPlans(prevPlans => [...prevPlans, dbPlan])
   }
 

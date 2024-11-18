@@ -12,33 +12,25 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTi
 
   const [initialStartTime, initialEndTime] = getProperInitialTimes(theActivity, isDaily, minTime)
 
-  // interval input
-  const [theStartTime, setTheStartTime] = useState(initialStartTime)
-  const [theEndTime, setTheEndTime] = useState(initialEndTime)
+  const [formValues, setFormValues] = useState({
+    startTime: initialStartTime,
+    endTime: initialEndTime,
+    name: theActivity?.name || "",
+    priority: theActivity?.priority || "OPTIONAL",
+  })
 
-  // name input
-  const [theName, setTheName] = useState(theActivity?.name || "")
-
-  // priority input
-  const [thePriority, setThePriority] = useState(theActivity?.priority || "OPTIONAL")
+  const handleChange = (field, value) => {
+    setFormValues(prev => ({ ...prev, [field]: value }))
+  }
 
   const formMode = theActivity ? "UPDATE" : "ADD"
 
-  const newActivity = {
-    startTime: theStartTime,
-    endTime: theEndTime,
-    name: theName,
-    priority: thePriority,
-  }
-
   const addTheActivity = async () => {
-    const dbActivity = await persistActivity(newActivity, planId)
+    const dbActivity = await persistActivity(formValues, planId)
 
     setPlans(prevPlans =>
       prevPlans.map(plan =>
-        plan.id === planId
-          ? { ...plan, activities: [...(plan.activities || []), dbActivity] }
-          : plan
+        plan.id === planId ? { ...plan, activities: [...plan.activities, dbActivity] } : plan
       )
     )
   }
@@ -52,11 +44,9 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTi
               activities: plan.activities.map(activity =>
                 activity.id === theActivity.id
                   ? {
-                      ...activity,
-                      startTime: theStartTime,
-                      endTime: theEndTime,
-                      name: theName,
-                      priority: thePriority,
+                      id: activity.id,
+                      steps: activity.steps,
+                      ...formValues,
                     }
                   : activity
               ),
@@ -65,17 +55,24 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTi
       )
     )
     // let the activity update in the meantime
-    updateActivity(newActivity, theActivity.id)
+    updateActivity(formValues, theActivity.id)
   }
 
   const handleAction = formMode === "ADD" ? addTheActivity : updateTheActivity
 
   const isCorrectInterval =
-    (minTime === null || (isDaily ? theStartTime >= minTime : theStartTime > minTime)) &&
-    theStartTime < theEndTime &&
-    (maxTime === null || (isDaily ? theEndTime <= maxTime : theEndTime < maxTime))
+    (minTime === null ||
+      (isDaily ? formValues.startTime >= minTime : formValues.startTime > minTime)) &&
+    formValues.startTime < formValues.endTime &&
+    (maxTime === null || (isDaily ? formValues.endTime <= maxTime : formValues.endTime < maxTime))
 
-  const tooltipContent = getIntervalErrorMsg(minTime, maxTime, isDaily, theStartTime, theEndTime)
+  const intervalErrorMsg = getIntervalErrorMsg(
+    minTime,
+    maxTime,
+    isDaily,
+    formValues.startTime,
+    formValues.endTime
+  )
 
   useClickOutside(activityFormRef, () => closeForm())
 
@@ -86,24 +83,37 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTi
           !isCorrectInterval && "outline outline-red-600 outline-4"
         }`}
       >
-        <Tooltip isVisible={!isCorrectInterval} type={"ERROR"} content={tooltipContent} />
-        <IntervalInput theTime={theStartTime} setTheTime={setTheStartTime} isDaily={isDaily} />
+        <Tooltip isVisible={!isCorrectInterval} type={"ERROR"} content={intervalErrorMsg} />
+        <IntervalInput
+          value={formValues.startTime}
+          onChange={value => handleChange("startTime", value)}
+          type={isDaily ? "time" : "date"}
+        />
         <div>to</div>
-        <IntervalInput theTime={theEndTime} setTheTime={setTheEndTime} isDaily={isDaily} />
+        <IntervalInput
+          value={formValues.endTime}
+          onChange={value => handleChange("endTime", value)}
+          type={isDaily ? "time" : "date"}
+        />
       </div>
       <div className="inline-block ml-6">
-        <NameInput theName={theName} setTheName={setTheName} />
+        <NameInput value={formValues.name} onChange={value => handleChange("name", value)} />
       </div>
       <div className="inline-block ml-6">
-        <PriorityInput thePriority={thePriority} setThePriority={setThePriority} />
+        <PriorityInput
+          value={formValues.priority}
+          onChange={value => handleChange("priority", value)}
+        />
       </div>
       <button
         onClick={() => {
           handleAction()
           closeForm()
         }}
-        className={`test-container ml-8 ${(!isCorrectInterval || theName == "") && "bg-gray-600"}`}
-        disabled={!isCorrectInterval || theName === ""}
+        className={`test-container ml-8 ${
+          (!isCorrectInterval || formValues.name == "") && "bg-gray-600"
+        }`}
+        disabled={!isCorrectInterval || formValues.name === ""}
       >
         {formMode}
       </button>
@@ -115,24 +125,18 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTi
 }
 
 // The form components
-const IntervalInput = ({ theTime, setTheTime, isDaily }) => {
-  const handleInput = e => setTheTime(e.target.value)
-
+const IntervalInput = ({ value, onChange, type }) => {
   return (
     <input
       className={"text-black rounded"}
-      type={isDaily ? "time" : "date"}
-      value={theTime}
-      onChange={handleInput}
+      type={type}
+      value={value}
+      onChange={e => onChange(e.target.value)}
     />
   )
 }
 
-const NameInput = ({ theName, setTheName }) => {
-  const handleName = e => {
-    setTheName(e.target.value)
-  }
-
+const NameInput = ({ value, onChange }) => {
   return (
     <>
       <label className="block w-fit" htmlFor="activityName">
@@ -141,8 +145,8 @@ const NameInput = ({ theName, setTheName }) => {
       <input
         className="text-black pl-2"
         type="text"
-        value={theName}
-        onChange={handleName}
+        value={value}
+        onChange={e => onChange(e.target.value)}
         id="activityName"
         autoComplete="off"
         placeholder="Set the Activity Name"
@@ -151,17 +155,18 @@ const NameInput = ({ theName, setTheName }) => {
   )
 }
 
-const PriorityInput = ({ thePriority, setThePriority }) => {
-  const handlePriority = e => {
-    setThePriority(e.target.value)
-  }
-
+const PriorityInput = ({ value, onChange }) => {
   return (
     <>
       <label className="block w-fit" htmlFor="thePriority">
         Choose priority
       </label>
-      <select className="text-black" id="thePriority" value={thePriority} onChange={handlePriority}>
+      <select
+        className="text-black"
+        id="thePriority"
+        value={value}
+        onChange={e => onChange(e.target.value)}
+      >
         <option value="HIGH">high</option>
         <option value="MEDIUM">medium</option>
         <option value="LIGHT">light</option>
