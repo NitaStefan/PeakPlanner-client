@@ -14,7 +14,16 @@ import calculateDateInterval from "../../utils/calculateDateInterval"
 import addDurationStrings from "../../utils/addDurationStrings"
 import subtractDurationStrings from "../../utils/subtractDurationStrings"
 
-const Activity = ({ activity, planId, setPlans, minTime, maxTime, isDaily }) => {
+const Activity = ({
+  activity,
+  planId,
+  setPlans,
+  minTime,
+  maxTime,
+  isDaily,
+  showStepsForActId,
+  toggleShowSteps,
+}) => {
   const [editActivityId, setEditActivityId] = useState(0)
 
   return (
@@ -26,6 +35,8 @@ const Activity = ({ activity, planId, setPlans, minTime, maxTime, isDaily }) => 
           planId={planId}
           setPlans={setPlans}
           openEditForm={() => setEditActivityId(activity.id)}
+          showStepsForActId={showStepsForActId}
+          toggleShowSteps={toggleShowSteps}
         />
       ) : (
         <ActivityForm
@@ -42,8 +53,15 @@ const Activity = ({ activity, planId, setPlans, minTime, maxTime, isDaily }) => 
   )
 }
 
-const ActivityInformation = ({ activity, planId, setPlans, openEditForm, isDaily }) => {
-  const [showSteps, setShowSteps] = useState(false) // TODO: replace showSteps using the activity id
+const ActivityInformation = ({
+  activity,
+  planId,
+  setPlans,
+  openEditForm,
+  isDaily,
+  showStepsForActId,
+  toggleShowSteps,
+}) => {
   const [addStepToActId, setAddStepToActId] = useState(0)
 
   const deleteActivity = activityId => {
@@ -74,7 +92,7 @@ const ActivityInformation = ({ activity, planId, setPlans, openEditForm, isDaily
         <p className="text-tan text-xl mb-4">
           {inTitleCase(activity.name)} <Priority priority={activity.priority} />
         </p>
-        {showSteps ? (
+        {showStepsForActId === activity.id ? (
           <>
             <ul>
               {activity.steps.map(step => (
@@ -117,7 +135,7 @@ const ActivityInformation = ({ activity, planId, setPlans, openEditForm, isDaily
               <button
                 onClick={() => {
                   setAddStepToActId(activity.id)
-                  setShowSteps(true)
+                  toggleShowSteps(activity.id)
                 }}
                 className="border-2 px-1"
               >
@@ -135,7 +153,7 @@ const ActivityInformation = ({ activity, planId, setPlans, openEditForm, isDaily
         />
         <button
           className="border-2 rounded-md float-right ml-2 mr-8"
-          onClick={() => setShowSteps(!showSteps)}
+          onClick={() => toggleShowSteps(activity.id)}
         >
           <DropDown />
         </button>

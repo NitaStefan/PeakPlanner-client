@@ -11,6 +11,7 @@ import BreakTime from "../BreakTime"
 
 const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
   const [addActivityToPlanId, setAddActivityToPlanId] = useState(0)
+  const [showStepsForActId, setShowStepsForActId] = useState(0)
 
   return isDaily && displayedPlans !== null && displayedPlans.length === 0 ? (
     <InitializeDailyPlans setDailyPlans={setDisplayedPlans} />
@@ -26,41 +27,44 @@ const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
           return (
             <div key={plan.id}>
               <div className="bg-medium my-2">{inTitleCase(plan.title)} </div>
-              {plan.activities &&
-                plan.activities.map((activity, index) => {
-                  const [prevActEndTime, nextActStartTime] = getTimeConstraints(
-                    plan.activities,
-                    index
-                  )
+              {plan.activities.map((activity, index) => {
+                const [prevActEndTime, nextActStartTime] = getTimeConstraints(
+                  plan.activities,
+                  index
+                )
 
-                  let breakTime = ""
-                  if (index === 0) {
-                    if (isDaily) {
-                      breakTime = addDurationStrings(
-                        calculateTimeInterval(lastActivityEndTime, "23:59"),
-                        calculateTimeInterval("00:00", activity.startTime)
-                      )
-                      breakTime = addDurationStrings(breakTime, "1m")
-                    }
-                  } else
-                    breakTime = isDaily
-                      ? calculateTimeInterval(prevActEndTime, activity.startTime)
-                      : calculateDateInterval(prevActEndTime, activity.startTime)
+                let breakTime = ""
+                if (index === 0) {
+                  if (isDaily) {
+                    breakTime = addDurationStrings(
+                      calculateTimeInterval(lastActivityEndTime, "23:59"),
+                      calculateTimeInterval("00:00", activity.startTime)
+                    )
+                    breakTime = addDurationStrings(breakTime, "1m")
+                  }
+                } else
+                  breakTime = isDaily
+                    ? calculateTimeInterval(prevActEndTime, activity.startTime)
+                    : calculateDateInterval(prevActEndTime, activity.startTime)
 
-                  return (
-                    <div key={activity.id}>
-                      <BreakTime breakTime={breakTime} />
-                      <Activity
-                        isDaily={isDaily}
-                        planId={plan.id}
-                        activity={activity}
-                        setPlans={setDisplayedPlans}
-                        minTime={prevActEndTime}
-                        maxTime={nextActStartTime}
-                      />
-                    </div>
-                  )
-                })}
+                return (
+                  <div key={activity.id}>
+                    <BreakTime breakTime={breakTime} />
+                    <Activity
+                      isDaily={isDaily}
+                      planId={plan.id}
+                      activity={activity}
+                      setPlans={setDisplayedPlans}
+                      minTime={prevActEndTime}
+                      maxTime={nextActStartTime}
+                      showStepsForActId={showStepsForActId}
+                      toggleShowSteps={actId =>
+                        setShowStepsForActId(prevActId => (actId === prevActId ? 0 : actId))
+                      }
+                    />
+                  </div>
+                )
+              })}
 
               {addActivityToPlanId !== plan.id ? (
                 !(isDaily && lastActivityEndTime >= "23:59") && (

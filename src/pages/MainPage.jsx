@@ -4,6 +4,7 @@ import { useState } from "react"
 import usePlansOfType from "../components/hooks/usePlansOfType"
 
 const MainPage = () => {
+  //TODO create loading component and use it wherever necessary
   const [showDailyPlans, setShowDailyPlans] = useState(true)
 
   const {

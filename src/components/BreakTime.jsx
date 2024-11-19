@@ -1,6 +1,6 @@
 const BreakTime = ({ breakTime }) => {
   return breakTime !== "1m" && breakTime !== "1d" && breakTime !== "" ? (
-    <div className="test-container bg-tan">{breakTime}</div>
+    <div className="test-container border-tan">{breakTime}</div>
   ) : null
 }
 
