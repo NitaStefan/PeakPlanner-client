@@ -10,6 +10,8 @@ import Tooltip from "../Tooltip"
 const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTime, maxTime }) => {
   const activityFormRef = useRef(null)
 
+  const [isChoosingTime, setIsChoosingTime] = useState(false)
+
   const [initialStartTime, initialEndTime] = getProperInitialTimes(theActivity, isDaily, minTime)
 
   const [formValues, setFormValues] = useState({
@@ -60,6 +62,7 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTi
 
   const handleAction = formMode === "ADD" ? addTheActivity : updateTheActivity
 
+  //TODO make sure the total duration does not surpass the interval time
   const isCorrectInterval =
     (minTime === null ||
       (isDaily ? formValues.startTime >= minTime : formValues.startTime > minTime)) &&
@@ -74,7 +77,10 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTi
     formValues.endTime
   )
 
-  useClickOutside(activityFormRef, () => closeForm())
+  useClickOutside(activityFormRef, () => setIsChoosingTime(false))
+  useClickOutside(activityFormRef, () => closeForm(), isChoosingTime)
+
+  console.log(isChoosingTime)
 
   return (
     <div ref={activityFormRef} className="test-container">
@@ -88,12 +94,14 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTi
           value={formValues.startTime}
           onChange={value => handleChange("startTime", value)}
           type={isDaily ? "time" : "date"}
+          setIsChoosingTime={setIsChoosingTime}
         />
         <div>to</div>
         <IntervalInput
           value={formValues.endTime}
           onChange={value => handleChange("endTime", value)}
           type={isDaily ? "time" : "date"}
+          setIsChoosingTime={setIsChoosingTime}
         />
       </div>
       <div className="inline-block ml-6">
@@ -125,13 +133,14 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTi
 }
 
 // The form components
-const IntervalInput = ({ value, onChange, type }) => {
+const IntervalInput = ({ value, onChange, type, setIsChoosingTime }) => {
   return (
     <input
       className={"text-black rounded"}
       type={type}
       value={value}
       onChange={e => onChange(e.target.value)}
+      onFocus={() => setIsChoosingTime(true)}
     />
   )
 }
