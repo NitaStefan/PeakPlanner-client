@@ -1,23 +1,6 @@
-const subtractDurationStrings = (time1, time2) => {
-  // Helper function to convert time strings to minutes
-  function timeToMinutes(time) {
-    let minutes = 0
-    const regex = /(\d+)([dhm])/g // Supports days, hours, and minutes
-    let match
-    while ((match = regex.exec(time)) !== null) {
-      const value = parseInt(match[1], 10)
-      const unit = match[2]
-      if (unit === "d") {
-        minutes += value * 24 * 60 // Convert days to minutes
-      } else if (unit === "h") {
-        minutes += value * 60 // Convert hours to minutes
-      } else if (unit === "m") {
-        minutes += value // Add minutes directly
-      }
-    }
-    return minutes
-  }
+import durationToMinutes from "./durationToMinutes"
 
+const subtractDurationStrings = (time1, time2) => {
   // Helper function to convert minutes back to a time string
   function minutesToTime(minutes) {
     const days = Math.floor(minutes / (24 * 60))
@@ -33,8 +16,8 @@ const subtractDurationStrings = (time1, time2) => {
   }
 
   // Convert both times to minutes
-  const minutes1 = timeToMinutes(time1)
-  const minutes2 = timeToMinutes(time2)
+  const minutes1 = durationToMinutes(time1)
+  const minutes2 = durationToMinutes(time2)
 
   // Subtract minutes2 from minutes1
   const totalMinutes = minutes1 - minutes2

@@ -62,34 +62,26 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTi
 
   const handleAction = formMode === "ADD" ? addTheActivity : updateTheActivity
 
-  //TODO make sure the total duration does not surpass the interval time
-  const isCorrectInterval =
-    (minTime === null ||
-      (isDaily ? formValues.startTime >= minTime : formValues.startTime > minTime)) &&
-    formValues.startTime < formValues.endTime &&
-    (maxTime === null || (isDaily ? formValues.endTime <= maxTime : formValues.endTime < maxTime))
-
   const intervalErrorMsg = getIntervalErrorMsg(
     minTime,
     maxTime,
     isDaily,
     formValues.startTime,
-    formValues.endTime
+    formValues.endTime,
+    theActivity ? theActivity.steps : null
   )
 
   useClickOutside(activityFormRef, () => setIsChoosingTime(false))
   useClickOutside(activityFormRef, () => closeForm(), isChoosingTime)
 
-  console.log(isChoosingTime)
-
   return (
     <div ref={activityFormRef} className="test-container">
       <div
         className={`inline-block relative ${
-          !isCorrectInterval && "outline outline-red-600 outline-4"
+          intervalErrorMsg && "outline outline-red-600 outline-4"
         }`}
       >
-        <Tooltip isVisible={!isCorrectInterval} type={"ERROR"} content={intervalErrorMsg} />
+        <Tooltip isVisible={intervalErrorMsg !== null} type={"ERROR"} content={intervalErrorMsg} />
         <IntervalInput
           value={formValues.startTime}
           onChange={value => handleChange("startTime", value)}
@@ -119,9 +111,9 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTi
           closeForm()
         }}
         className={`test-container ml-8 ${
-          (!isCorrectInterval || formValues.name == "") && "bg-gray-600"
+          (intervalErrorMsg !== null || formValues.name == "") && "bg-gray-600"
         }`}
-        disabled={!isCorrectInterval || formValues.name === ""}
+        disabled={intervalErrorMsg !== null || formValues.name === ""}
       >
         {formMode}
       </button>
@@ -141,6 +133,7 @@ const IntervalInput = ({ value, onChange, type, setIsChoosingTime }) => {
       value={value}
       onChange={e => onChange(e.target.value)}
       onFocus={() => setIsChoosingTime(true)}
+      min={type === "date" ? "2024-11-20" : null}
     />
   )
 }
