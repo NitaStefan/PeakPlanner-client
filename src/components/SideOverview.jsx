@@ -23,9 +23,9 @@ const SideOverview = ({ dailyPlans, goalPlans, setGoalPlans, setShowDailyPlans }
         {dailyPlans &&
           dailyPlans.map(plan => (
             <li key={plan.id} className="pl-4 py-2">
-              <a className="text-lightText" href="#">
+              <span className="text-lightText" href="#">
                 {plan.title}
-              </a>
+              </span>
             </li>
           ))}
       </ul>

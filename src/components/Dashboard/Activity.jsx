@@ -13,6 +13,9 @@ import calculateTimeInterval from "../../utils/calculateTimeInterval"
 import calculateDateInterval from "../../utils/calculateDateInterval"
 import addDurationStrings from "../../utils/addDurationStrings"
 import subtractDurationStrings from "../../utils/subtractDurationStrings"
+import getCurrentDate from "../../utils/getCurrentDate"
+import getCurrentHour from "../../utils/getCurrentHour"
+import isCurrentlyBetween from "../../utils/isCurrentlyBetween"
 
 const Activity = ({
   activity,
@@ -63,6 +66,8 @@ const ActivityInformation = ({
   toggleShowSteps,
 }) => {
   const [addStepToActId, setAddStepToActId] = useState(0)
+  // TODO use isActiveActivity boolean
+  // const isActiveActivity = isCurrentlyBetween(activity.startTime, activity.endTime)
 
   const deleteActivity = activityId => {
     setPlans(prevPlans =>

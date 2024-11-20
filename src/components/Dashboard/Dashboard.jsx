@@ -9,6 +9,7 @@ import calculateDateInterval from "../../utils/calculateDateInterval"
 import addDurationStrings from "../../utils/addDurationStrings"
 import subtractDurationStrings from "../../utils/subtractDurationStrings"
 import BreakTime from "../BreakTime"
+import isCurrentlyBetween from "../../utils/isCurrentlyBetween"
 
 const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
   const [addActivityToPlanId, setAddActivityToPlanId] = useState(0)
@@ -50,6 +51,7 @@ const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
                         calculateDateInterval(prevActEndTime, activity.startTime),
                         "2d"
                       )
+                // const isBreakActive = isCurrentlyBetween(prevActEndTime, activity.startTime)
 
                 return (
                   <div key={activity.id}>
