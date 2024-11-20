@@ -87,6 +87,8 @@ const StepForm = ({ closeForm, theStep, isDaily, planId, activityId, setPlans, s
     minutes: availableM,
   } = extractDurationParts(timeAvailable)
 
+  const isInvalidData = description.trim() === "" || duration === ""
+
   useClickOutside(stepFormRef, () => closeForm())
 
   return (
@@ -110,6 +112,7 @@ const StepForm = ({ closeForm, theStep, isDaily, planId, activityId, setPlans, s
 
       <textarea value={description} onChange={handleDescription} rows="2" className="resize-none" />
       <button
+        disabled={isInvalidData}
         onClick={() => {
           handleAction()
           closeForm()

@@ -53,7 +53,7 @@ const PlanForm = ({ setGoalPlans, closeForm, thePlan }) => {
           handleAction()
           closeForm()
         }}
-        className={`text-lightText px-2 ${theTitle === "" && "bg-gray-600"}`}
+        className={`text-lightText px-2 ${theTitle.trim() === "" && "bg-gray-600"}`}
       >
         {formMode}
       </button>

@@ -7,6 +7,7 @@ import getTimeConstraints from "../../utils/getTimeConstraints"
 import calculateTimeInterval from "../../utils/calculateTimeInterval"
 import calculateDateInterval from "../../utils/calculateDateInterval"
 import addDurationStrings from "../../utils/addDurationStrings"
+import subtractDurationStrings from "../../utils/subtractDurationStrings"
 import BreakTime from "../BreakTime"
 
 const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
@@ -45,7 +46,10 @@ const Dashboard = ({ displayedPlans, setDisplayedPlans, isDaily }) => {
                 } else
                   breakTime = isDaily
                     ? calculateTimeInterval(prevActEndTime, activity.startTime)
-                    : calculateDateInterval(prevActEndTime, activity.startTime)
+                    : subtractDurationStrings(
+                        calculateDateInterval(prevActEndTime, activity.startTime),
+                        "2d"
+                      )
 
                 return (
                   <div key={activity.id}>

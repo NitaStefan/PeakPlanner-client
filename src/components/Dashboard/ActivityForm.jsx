@@ -71,6 +71,8 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTi
     theActivity ? theActivity.steps : null
   )
 
+  const isInvalidData = intervalErrorMsg !== null || formValues.name.trim() == ""
+
   useClickOutside(activityFormRef, () => setIsChoosingTime(false))
   useClickOutside(activityFormRef, () => closeForm(), isChoosingTime)
 
@@ -110,10 +112,8 @@ const ActivityForm = ({ planId, setPlans, closeForm, theActivity, isDaily, minTi
           handleAction()
           closeForm()
         }}
-        className={`test-container ml-8 ${
-          (intervalErrorMsg !== null || formValues.name == "") && "bg-gray-600"
-        }`}
-        disabled={intervalErrorMsg !== null || formValues.name === ""}
+        className={`test-container ml-8 ${isInvalidData && "bg-gray-600"}`}
+        disabled={isInvalidData}
       >
         {formMode}
       </button>
