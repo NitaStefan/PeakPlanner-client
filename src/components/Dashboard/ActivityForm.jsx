@@ -133,7 +133,6 @@ const IntervalInput = ({ value, onChange, type, setIsChoosingTime }) => {
       value={value}
       onChange={e => onChange(e.target.value)}
       onFocus={() => setIsChoosingTime(true)}
-      min={type === "date" ? "2024-11-20" : null}
     />
   )
 }
