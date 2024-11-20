@@ -2,14 +2,17 @@ import { useEffect, useRef, useState } from "react"
 import persistPlan from "../utils/restApiRequests/persistPlan"
 import useClickOutside from "./hooks/useClickOutside"
 import updateDbPlan from "../utils/restApiRequests/updatePlan"
+import languagePlan from "../utils/constants/createLanguagePlan"
 
 const PlanForm = ({ setGoalPlans, closeForm, thePlan }) => {
   const [theTitle, setTheTitle] = useState(thePlan?.title || "")
   const titleRef = useRef(null)
 
-  const newPlan = { title: theTitle, type: "GOAL" }
+  let newPlan = { title: theTitle, type: "GOAL" }
 
   const handleAddPlan = async () => {
+    if (newPlan.title === "_foreign_language_") newPlan = languagePlan
+
     const dbPlan = await persistPlan(newPlan)
 
     setGoalPlans(prevPlans => [...prevPlans, dbPlan])

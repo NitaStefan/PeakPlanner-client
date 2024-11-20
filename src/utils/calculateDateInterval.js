@@ -3,8 +3,8 @@ function calculateDateInterval(startDate, endDate) {
   const start = new Date(startDate)
   const end = new Date(endDate)
 
-  // Calculate the difference in milliseconds
-  const diffMilliseconds = end - start
+  // Calculate the difference in milliseconds and add one day
+  const diffMilliseconds = end - start + 1000 * 60 * 60 * 24
 
   // Convert milliseconds to days
   const diffDays = Math.floor(diffMilliseconds / (1000 * 60 * 60 * 24))

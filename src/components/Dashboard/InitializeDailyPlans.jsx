@@ -1,6 +1,6 @@
-import workdayWeekendPlans from "../../utils/createWorkWeekendDayPlans"
-import daysOfWeekPlans from "../../utils/createDaysOfWeekPlans"
-import successfulDailyPlan from "../../utils/createSuccessfulDailyPlan"
+import workdayWeekendPlans from "../../utils/constants/createWorkWeekendDayPlans"
+import daysOfWeekPlans from "../../utils/constants/createDaysOfWeekPlans"
+import successfulDailyPlan from "../../utils/constants/createSuccessfulDailyPlan"
 import persistDailyPlans from "../../utils/restApiRequests/persistDailyPlans"
 
 const InitializeDailyPlans = ({ setDailyPlans }) => {
